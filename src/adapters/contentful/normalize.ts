@@ -98,7 +98,7 @@ function mapContentType(raw: RawContentType): NormalizedContentType {
   return {
     id: raw.sys.id,
     name: raw.name,
-    description: raw.description,
+    description: raw.description ?? undefined,
     displayField: raw.displayField ?? undefined,
     createdAt: raw.sys.createdAt,
     updatedAt: raw.sys.updatedAt,

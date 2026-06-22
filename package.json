@@ -9,7 +9,7 @@
   "author": "FocusReactive <ship@focusreactive.com>",
   "type": "module",
   "packageManager": "pnpm@11.8.0",
-  "bin": { "cms-validate": "dist/cli/index.js" },
+  "bin": { "cms-validate": "dist/src/cli/index.js" },
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "test": "vitest run",

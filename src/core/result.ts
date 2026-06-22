@@ -30,7 +30,7 @@ export interface OverallGrade {
 
 export interface ValidationResult {
   source: {
-    rl?: string;
+    url?: string;
     cms: CmsId;
     spaceId: string;
     environment: string;

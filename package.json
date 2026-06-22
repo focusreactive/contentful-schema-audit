@@ -11,7 +11,8 @@
   "packageManager": "pnpm@11.8.0",
   "bin": { "cms-validate": "dist/src/cli/index.js" },
   "scripts": {
-    "build": "tsc -p tsconfig.json",
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
     "lint": "eslint .",

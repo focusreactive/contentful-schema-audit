@@ -2,6 +2,7 @@ import type { CmsId, NormalizedModel } from "./model/index.js";
 import type { Band, CheckResult } from "./checks/index.js";
 import type { DimensionId } from "./signals/index.js";
 import type { Tier } from "./dimensions/types.js";
+import type { Narration } from "./narration/narrator.js";
 
 export type DimensionState = "scored" | "not_assessable" | "not_applicable";
 
@@ -37,7 +38,7 @@ export interface ValidationResult {
   };
   overall: OverallGrade;
   dimensions: DimensionResult[];
-  narration?: unknown; // TODO(Phase 5): tighten to Narration once narration/narrator.ts exists
+  narration?: Narration;
   model?: NormalizedModel;
   generatedAt: string;
 }

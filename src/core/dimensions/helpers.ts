@@ -3,7 +3,7 @@ import type { CheckResult, Severity } from "../checks/index.js";
 
 export const PAGE_TYPE_NAME_RE =
   /page|article|post|landing|blog|news|story|product|docs?|pdp|plp|clp|hp|category|collection|event|person|location|resource|campaign|episode|podcast|webinar|whitepaper/i;
-export const SLUG_FIELD_RE = /slug|path|permalink|url|route|handle|vanityUrl|canonicalPath|urlSegment/i;
+export const SLUG_FIELD_RE = /slug|path|permalink|route|handle|vanityUrl|canonicalPath|urlSegment/i;
 export const STRINGLY_LINK_RE =
   /(?<![a-z])([Uu]rl|[Ll]ink|[Hh]ref|[Pp]age|[Rr]ef|[Rr]elated|[Pp]arent|[Cc]hild)(?![a-z])/;
 export const RICHTEXT_CANDIDATE_RE = /body|content|description|copy|text|article|richtext/i;
@@ -83,6 +83,7 @@ export function ratioCheck(opts: RatioCheckOpts): CheckResult {
   const failing = opts.units.filter((unit) => !opts.satisfies(unit));
   const satisfied = opts.units.length - failing.length;
   const ratio = opts.units.length === 0 ? 1 : satisfied / opts.units.length;
+
   return {
     id: opts.id,
     title: opts.title,

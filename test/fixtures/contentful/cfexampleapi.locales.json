@@ -1,0 +1,6 @@
+{
+  "items": [
+    { "code": "en-US", "name": "English", "default": true, "fallbackCode": null },
+    { "code": "tlh", "name": "Klingon", "default": false, "fallbackCode": "en-US" }
+  ]
+}

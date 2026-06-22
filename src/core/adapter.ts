@@ -1,0 +1,47 @@
+import type { CmsId, NormalizedModel } from "./model/index.js";
+import type { CapabilityManifest } from "./signals/index.js";
+
+export interface ObservedRequest {
+  url: string;
+  method: string;
+  headers: Record<string, string>;
+}
+
+export interface FetchedPage {
+  url: string;
+  finalUrl: string;
+  html: string;
+  scripts: string[];
+  requests: ObservedRequest[];
+}
+
+export interface DetectResult {
+  isMatch: boolean;
+  spaceId?: string;
+  region?: "global" | "eu";
+  signals: string[];
+}
+
+export interface Access {
+  spaceId: string;
+  environment: string;
+  deliveryToken: string;
+  region: "global" | "eu";
+  acquisition: "sniffed" | "provided";
+}
+
+export interface AcquireOpts {
+  page: FetchedPage;
+  providedToken?: string;
+  providedSpaceId?: string;
+  environment?: string;
+  region?: "global" | "eu";
+}
+
+export interface CmsAdapter {
+  readonly id: CmsId;
+  detect(page: FetchedPage): DetectResult;
+  acquireAccess(detect: DetectResult, opts: AcquireOpts): Promise<Access>;
+  fetchModel(access: Access): Promise<NormalizedModel>;
+  capabilities(): CapabilityManifest;
+}

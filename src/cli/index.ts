@@ -8,6 +8,8 @@ import { contentfulAdapter } from "../adapters/contentful/index.js";
 import { fetchPage } from "../adapters/contentful/fetch-page.js";
 import { createAiNarrator } from "../core/narration/ai-narrator.js";
 import { nullNarrator } from "../core/narration/null-narrator.js";
+import { createAiSemanticAnalyzer } from "../core/semantic/ai-analyzer.js";
+import { nullSemanticAnalyzer } from "../core/semantic/null-analyzer.js";
 
 async function main(): Promise<void> {
   const args = parseArgs(process.argv);
@@ -16,6 +18,7 @@ async function main(): Promise<void> {
     fetchPage,
     adapter: contentfulAdapter,
     narrator: args.ai ? createAiNarrator() : nullNarrator,
+    analyzer: args.ai ? createAiSemanticAnalyzer() : nullSemanticAnalyzer,
     now: () => new Date().toISOString(),
   });
 

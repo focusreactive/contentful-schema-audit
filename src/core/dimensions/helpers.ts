@@ -1,5 +1,13 @@
-import type { NormalizedField, NormalizedModel } from "../model/index.js";
+import type { NormalizedContentType, NormalizedField, NormalizedModel } from "../model/index.js";
 import type { CheckResult, Severity } from "../checks/index.js";
+import type { EvaluateContext } from "./types.js";
+import { typeHasRole } from "../semantic/roles.js";
+
+export function pageTypes(ctx: EvaluateContext): NormalizedContentType[] {
+  const { model, semantic } = ctx;
+  if (!semantic) return [];
+  return model.contentTypes.filter((t) => typeHasRole(semantic, t.id, "page"));
+}
 
 export function isEntryLinkField(field: NormalizedField): boolean {
   return (

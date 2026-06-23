@@ -1,18 +1,12 @@
-import type { DimensionDefinition, EvaluateContext } from "./types.js";
+import type { DimensionDefinition } from "./types.js";
 import type { NormalizedContentType } from "../model/index.js";
 import type { SemanticAnalysis } from "../semantic/types.js";
-import { ratioCheck } from "./helpers.js";
-import { fieldHasRole, typeHasRole } from "../semantic/roles.js";
+import { pageTypes, ratioCheck } from "./helpers.js";
+import { fieldHasRole } from "../semantic/roles.js";
 
 const PRESENT_THRESHOLD = 1.0;
 const UNIQUE_THRESHOLD = 0.8;
 const PATTERN_THRESHOLD = 0.5;
-
-function pageTypes(ctx: EvaluateContext) {
-  const { model, semantic } = ctx;
-  if (!semantic) return [];
-  return model.contentTypes.filter((t) => typeHasRole(semantic, t.id, "page"));
-}
 
 function slugFieldsOf(type: NormalizedContentType, semantic: SemanticAnalysis) {
   return type.fields.filter((f) => fieldHasRole(semantic, type.id, f.id, "slug"));

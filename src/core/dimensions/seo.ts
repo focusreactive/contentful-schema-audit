@@ -1,16 +1,10 @@
-import type { DimensionDefinition, EvaluateContext } from "./types.js";
+import type { DimensionDefinition } from "./types.js";
 import type { FieldRole } from "../semantic/types.js";
-import { ratioCheck } from "./helpers.js";
-import { fieldHasRole, typeHasRole } from "../semantic/roles.js";
+import { pageTypes, ratioCheck } from "./helpers.js";
+import { fieldHasRole } from "../semantic/roles.js";
 
 const PRESENCE_THRESHOLD = 0.8;
 const NOINDEX_THRESHOLD = 0.5;
-
-function pageTypes(ctx: EvaluateContext) {
-  const { model, semantic } = ctx;
-  if (!semantic) return [];
-  return model.contentTypes.filter((t) => typeHasRole(semantic, t.id, "page"));
-}
 
 export const seoDimension: DimensionDefinition = {
   id: "seo",

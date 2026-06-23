@@ -4,6 +4,7 @@ import type { RunArgs } from "./run.js";
 export interface CliArgs extends RunArgs {
   json: boolean;
   out?: string;
+  report?: string;
 }
 
 export function parseArgs(argv: string[]): CliArgs {
@@ -18,6 +19,7 @@ export function parseArgs(argv: string[]): CliArgs {
     .option("--json", "print JSON only")
     .option("--include-model", "embed the normalized model in the JSON")
     .option("--out <file>", "write the JSON result to a file")
+    .option("--report <file>", "write a Markdown report to a file")
     .allowExcessArguments(false);
 
   program.parse(argv);
@@ -34,5 +36,6 @@ export function parseArgs(argv: string[]): CliArgs {
     includeModel: Boolean(opts.includeModel),
     json: Boolean(opts.json),
     out: opts.out,
+    report: opts.report,
   };
 }

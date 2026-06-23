@@ -3,6 +3,7 @@ import { writeFile } from "node:fs/promises";
 import { parseArgs } from "./parse-args.js";
 import { run } from "./run.js";
 import { renderPretty } from "./pretty.js";
+import { renderReport } from "./report.js";
 import { contentfulAdapter } from "../adapters/contentful/index.js";
 import { fetchPage } from "../adapters/contentful/fetch-page.js";
 import { createAiNarrator } from "../core/narration/ai-narrator.js";
@@ -20,6 +21,7 @@ async function main(): Promise<void> {
 
   const json = JSON.stringify(result, null, 2);
   if (args.out) await writeFile(args.out, json, "utf8");
+  if (args.report) await writeFile(args.report, renderReport(result), "utf8");
   if (args.json) {
     process.stdout.write(`${json}\n`);
   } else {

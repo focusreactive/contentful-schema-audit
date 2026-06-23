@@ -10,4 +10,14 @@ describe("parseArgs", () => {
     const args = parseArgs(["node", "cli", "--no-ai", "--json", "--token", "tok", "--space-id", "sp"]);
     expect(args).toMatchObject({ ai: false, json: true, token: "tok", spaceId: "sp" });
   });
+
+  it("parses --report into the report path", () => {
+    const args = parseArgs(["node", "cli", "https://site.com", "--report", "out.md"]);
+    expect(args.report).toBe("out.md");
+  });
+
+  it("leaves report undefined when --report is absent", () => {
+    const args = parseArgs(["node", "cli", "https://site.com"]);
+    expect(args.report).toBeUndefined();
+  });
 });

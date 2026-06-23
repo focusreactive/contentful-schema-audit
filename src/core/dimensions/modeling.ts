@@ -1,10 +1,12 @@
-import type { DimensionDefinition } from "./types.js";
-import type { EvaluateContext } from "./types.js";
+import type { DimensionDefinition, EvaluateContext } from "./types.js";
 import type { CheckResult } from "../checks/index.js";
-import { allFields, isSeoField, RICHTEXT_CANDIDATE_RE } from "./helpers.js";
+import type { NormalizedModel } from "../model/index.js";
+import type { SemanticAnalysis } from "../semantic/types.js";
+import { allFields, notAssessableCheck } from "./helpers.js";
+import { GOD_TYPE_MAX_FIELDS, oversizedTypeIds } from "./structural.js";
+import { fieldHasRole, judgmentFor, resolveJudgment } from "../semantic/roles.js";
 
 const RICHTEXT_MIN_RATIO = 0.7;
-const GOD_TYPE_MAX_FIELDS = 30;
 const REUSE_MIN_TYPES = 3;
 const REUSE_MIN_REFERRERS = 2;
 const JSON_FIELD_MAX_RATIO = 0.1;
@@ -13,18 +15,70 @@ function ratioOf(count: number, total: number): number {
   return total === 0 ? 0 : count / total;
 }
 
+function richTextCheck(model: NormalizedModel, semantic: SemanticAnalysis): CheckResult {
+  const candidates = model.contentTypes.flatMap((t) =>
+    t.fields.filter((f) => fieldHasRole(semantic, t.id, f.id, "richBody")),
+  );
+  const actual = candidates.filter((f) => f.type === "richText");
+  const pass = candidates.length === 0 || ratioOf(actual.length, candidates.length) >= RICHTEXT_MIN_RATIO;
+  return {
+    id: "modeling.richText",
+    title: "Body fields use rich text",
+    severity: "major",
+    status: pass ? "pass" : "fail",
+    evidence: { summary: `${actual.length} of ${candidates.length} body-like fields use rich text` },
+    fixHint: "Use a RichText field for body/content rather than long plain text.",
+  };
+}
+
+function godTypesCheck(model: NormalizedModel, semantic: SemanticAnalysis): CheckResult {
+  const oversized = oversizedTypeIds(model);
+  const judged = oversized.map((id) => ({
+    id,
+    verdict: resolveJudgment(judgmentFor(semantic, "modeling.godTypes", id)),
+  }));
+  const confirmed = judged.filter((j) => j.verdict === "confirmed").map((j) => j.id);
+  const unknown = judged.filter((j) => j.verdict === "unknown");
+
+  if (confirmed.length > 0) {
+    return {
+      id: "modeling.godTypes",
+      title: "No oversized content types",
+      severity: "minor",
+      status: "fail",
+      evidence: {
+        summary: `${confirmed.length} content types are oversized and poorly structured`,
+        affectedTypes: confirmed,
+      },
+      fixHint: `Split content types with more than ${GOD_TYPE_MAX_FIELDS} fields into composable parts.`,
+    };
+  }
+  if (unknown.length > 0) {
+    return notAssessableCheck({
+      id: "modeling.godTypes",
+      title: "No oversized content types",
+      severity: "minor",
+      reason: `${unknown.length} large types could not be judged as god types vs. justified`,
+      fixHint: `Split content types with more than ${GOD_TYPE_MAX_FIELDS} fields into composable parts.`,
+    });
+  }
+  return {
+    id: "modeling.godTypes",
+    title: "No oversized content types",
+    severity: "minor",
+    status: "pass",
+    evidence: { summary: "No oversized content types, or large types are justified" },
+    fixHint: `Split content types with more than ${GOD_TYPE_MAX_FIELDS} fields into composable parts.`,
+  };
+}
+
 export const modelingDimension: DimensionDefinition = {
   id: "modeling",
   title: "Content Modeling Quality",
   tier: "high",
   requiredSignals: ["contentType.fields", "field.type"],
-  evaluate: ({ model }: EvaluateContext): CheckResult[] => {
+  evaluate: ({ model, semantic }: EvaluateContext): CheckResult[] => {
     const fields = allFields(model);
-    const richCandidates = fields.filter(
-      (f) => (RICHTEXT_CANDIDATE_RE.test(f.id) || RICHTEXT_CANDIDATE_RE.test(f.name)) && !isSeoField(f),
-    );
-    const richActual = richCandidates.filter((f) => f.type === "richText");
-    const godTypes = model.contentTypes.filter((t) => t.fields.length > GOD_TYPE_MAX_FIELDS);
     const jsonFields = fields.filter((f) => f.type === "json");
 
     const referrerCount = new Map<string, number>();
@@ -34,29 +88,31 @@ export const modelingDimension: DimensionDefinition = {
     const reuseSatisfied =
       model.contentTypes.length < REUSE_MIN_TYPES || [...referrerCount.values()].some((n) => n >= REUSE_MIN_REFERRERS);
 
+    const richText =
+      semantic ?
+        richTextCheck(model, semantic)
+      : notAssessableCheck({
+          id: "modeling.richText",
+          title: "Body fields use rich text",
+          severity: "major",
+          reason: "Identifying body/content fields needs AI semantic analysis.",
+          fixHint: "Use a RichText field for body/content rather than long plain text.",
+        });
+
+    const godTypes =
+      semantic ?
+        godTypesCheck(model, semantic)
+      : notAssessableCheck({
+          id: "modeling.godTypes",
+          title: "No oversized content types",
+          severity: "minor",
+          reason: "Judging oversized types needs AI semantic analysis.",
+          fixHint: `Split content types with more than ${GOD_TYPE_MAX_FIELDS} fields into composable parts.`,
+        });
+
     return [
-      {
-        id: "modeling.richText",
-        title: "Body fields use rich text",
-        severity: "major",
-        status:
-          richCandidates.length === 0 || ratioOf(richActual.length, richCandidates.length) >= RICHTEXT_MIN_RATIO ?
-            "pass"
-          : "fail",
-        evidence: { summary: `${richActual.length} of ${richCandidates.length} body-like fields use rich text` },
-        fixHint: "Use a RichText field for body/content rather than long plain text.",
-      },
-      {
-        id: "modeling.godTypes",
-        title: "No oversized content types",
-        severity: "minor",
-        status: godTypes.length === 0 ? "pass" : "fail",
-        evidence: {
-          summary: `${godTypes.length} content types exceed ${GOD_TYPE_MAX_FIELDS} fields`,
-          affectedTypes: godTypes.map((t) => t.id),
-        },
-        fixHint: `Split content types with more than ${GOD_TYPE_MAX_FIELDS} fields into composable parts.`,
-      },
+      richText,
+      godTypes,
       {
         id: "modeling.reuse",
         title: "Reusable building blocks exist",

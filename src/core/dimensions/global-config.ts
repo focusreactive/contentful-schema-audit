@@ -1,56 +1,78 @@
-import type { DimensionDefinition } from "./types.js";
-import type { EvaluateContext } from "./types.js";
+import type { DimensionDefinition, EvaluateContext } from "./types.js";
+import type { CheckResult } from "../checks/index.js";
 import type { NormalizedModel } from "../model/index.js";
-import { SINGLETON_CONFIG_RE } from "./helpers.js";
+import type { SemanticAnalysis, TypeRole } from "../semantic/types.js";
+import { judgmentFor, resolveJudgment, typeHasRole } from "../semantic/roles.js";
 
-const NAV_TYPE_RE = /nav|menu/i;
-const REDIRECT_TYPE_RE = /redirect/i;
+const REDIRECT_SUBJECT = "_dimension";
 
-function anyTypeMatches(model: NormalizedModel, re: RegExp): boolean {
-  return model.contentTypes.some((t) => re.test(t.id) || re.test(t.name));
+function anyTypeHasRole(model: NormalizedModel, semantic: SemanticAnalysis, role: TypeRole): boolean {
+  return model.contentTypes.some((t) => typeHasRole(semantic, t.id, role));
+}
+
+function redirectsCheck(model: NormalizedModel, semantic: SemanticAnalysis): CheckResult {
+  const base = {
+    id: "globalConfig.redirects",
+    title: "Redirects are modeled as entries",
+    severity: "minor" as const,
+    fixHint: "Model redirects as entries so editors can manage them in the CMS.",
+  };
+  if (anyTypeHasRole(model, semantic, "redirect")) {
+    return { ...base, status: "pass", evidence: { summary: "A redirect type is present" } };
+  }
+  const verdict = resolveJudgment(judgmentFor(semantic, "globalConfig.redirects", REDIRECT_SUBJECT));
+  if (verdict === "confirmed")
+    return {
+      ...base,
+      status: "fail",
+      evidence: { summary: "No redirect type, and redirects are not handled elsewhere" },
+    };
+  if (verdict === "refuted")
+    return {
+      ...base,
+      status: "pass",
+      evidence: { summary: "No redirect type, but redirects are handled outside the CMS (e.g. at the edge)" },
+    };
+  return {
+    ...base,
+    status: "not_assessable",
+    evidence: { summary: "Could not determine whether missing redirects are a real gap" },
+  };
 }
 
 export const globalConfigDimension: DimensionDefinition = {
   id: "globalConfig",
   title: "Global Configuration",
   tier: "situational",
-  requiredSignals: ["contentType.fields", "field.type"],
-  evaluate: ({ model }: EvaluateContext) => [
-    {
-      id: "globalConfig.settingsType",
-      title: "Centralized settings type exists",
-      severity: "minor",
-      status: anyTypeMatches(model, SINGLETON_CONFIG_RE) ? "pass" : "fail",
-      evidence: {
-        summary:
-          anyTypeMatches(model, SINGLETON_CONFIG_RE) ?
-            "A site-settings/config type is present"
-          : "No centralized settings/config type found",
+  requiredSignals: ["contentType.fields", "field.type", "semantic.analysis"],
+  evaluate: ({ model, semantic }: EvaluateContext): CheckResult[] => {
+    if (!semantic) return []; // unreachable: gated by the semantic.analysis signal
+    return [
+      {
+        id: "globalConfig.settingsType",
+        title: "Centralized settings type exists",
+        severity: "minor",
+        status: anyTypeHasRole(model, semantic, "settings") ? "pass" : "fail",
+        evidence: {
+          summary:
+            anyTypeHasRole(model, semantic, "settings") ?
+              "A site-settings/config type is present"
+            : "No centralized settings/config type found",
+        },
+        fixHint: "Add a singleton settings type for global config instead of hardcoding values.",
       },
-      fixHint: "Add a singleton settings type for global config instead of hardcoding values.",
-    },
-    {
-      id: "globalConfig.navModeled",
-      title: "Navigation is modeled as content",
-      severity: "minor",
-      status: anyTypeMatches(model, NAV_TYPE_RE) ? "pass" : "fail",
-      evidence: {
-        summary: anyTypeMatches(model, NAV_TYPE_RE) ? "Navigation/menu is modeled" : "No navigation/menu type found",
+      {
+        id: "globalConfig.navModeled",
+        title: "Navigation is modeled as content",
+        severity: "minor",
+        status: anyTypeHasRole(model, semantic, "nav") ? "pass" : "fail",
+        evidence: {
+          summary:
+            anyTypeHasRole(model, semantic, "nav") ? "Navigation/menu is modeled" : "No navigation/menu type found",
+        },
+        fixHint: "Model navigation as content so editors can manage menus without code changes.",
       },
-      fixHint: "Model navigation as content so editors can manage menus without code changes.",
-    },
-    {
-      id: "globalConfig.redirects",
-      title: "Redirects are modeled as entries",
-      severity: "minor",
-      status: anyTypeMatches(model, REDIRECT_TYPE_RE) ? "pass" : "fail",
-      evidence: {
-        summary:
-          anyTypeMatches(model, REDIRECT_TYPE_RE) ? "A redirect type is present" : (
-            "No redirect content type found (platform redirects are not visible from the CMS)"
-          ),
-      },
-      fixHint: "Model redirects as entries so editors can manage them in the CMS.",
-    },
-  ],
+      redirectsCheck(model, semantic),
+    ];
+  },
 };

@@ -1,24 +1,53 @@
-import type { DimensionDefinition } from "./types.js";
-import type { EvaluateContext } from "./types.js";
+import type { DimensionDefinition, EvaluateContext } from "./types.js";
 import type { CheckResult } from "../checks/index.js";
-import { allFields, isSlugField } from "./helpers.js";
+import type { NormalizedModel } from "../model/index.js";
+import type { SemanticAnalysis } from "../semantic/types.js";
+import { allFields, notAssessableCheck } from "./helpers.js";
+import { fieldHasRole } from "../semantic/roles.js";
 
 const COVERAGE_MIN_RATIO = 0.5;
+
+function identifierUniqueCheck(model: NormalizedModel, semantic: SemanticAnalysis): CheckResult {
+  const slugFields = model.contentTypes.flatMap((t) =>
+    t.fields.filter((f) => fieldHasRole(semantic, t.id, f.id, "slug")).map((f) => ({ typeId: t.id, field: f })),
+  );
+  const withoutUnique = slugFields.filter(({ field }) => !field.validations.some((v) => v.kind === "unique"));
+  return {
+    id: "validation.identifierUnique",
+    title: "Identifier fields are unique",
+    severity: "major",
+    status: withoutUnique.length === 0 ? "pass" : "fail",
+    evidence: {
+      summary: `${withoutUnique.length} of ${slugFields.length} slug/identifier fields lack a unique constraint`,
+      detail: { fields: withoutUnique.map((s) => `${s.typeId}.${s.field.id}`) },
+    },
+    fixHint: "Add a unique validation to slug and identifier fields.",
+  };
+}
 
 export const validationDimension: DimensionDefinition = {
   id: "validation",
   title: "Validation Discipline",
   tier: "medium",
   requiredSignals: ["field.validations", "field.required"],
-  evaluate: ({ model }: EvaluateContext): CheckResult[] => {
+  evaluate: ({ model, semantic }: EvaluateContext): CheckResult[] => {
     const fields = allFields(model);
     const validated = fields.filter((f) => f.validations.length > 0);
     const coverage = fields.length === 0 ? 1 : validated.length / fields.length;
-    const slugFields = fields.filter(isSlugField);
-    const slugsWithoutUnique = slugFields.filter((f) => !f.validations.some((v) => v.kind === "unique"));
     const typesWithoutRequired = model.contentTypes.filter(
       (t) => t.fields.length > 0 && !t.fields.some((f) => f.required),
     );
+
+    const identifierUnique =
+      semantic ?
+        identifierUniqueCheck(model, semantic)
+      : notAssessableCheck({
+          id: "validation.identifierUnique",
+          title: "Identifier fields are unique",
+          severity: "major",
+          reason: "Identifying slug/identifier fields needs AI semantic analysis.",
+          fixHint: "Add a unique validation to slug and identifier fields.",
+        });
 
     return [
       {
@@ -29,17 +58,7 @@ export const validationDimension: DimensionDefinition = {
         evidence: { summary: `${validated.length} of ${fields.length} fields carry at least one validation` },
         fixHint: "Add validations (size, regexp, range, allowed values) to constrain editor input.",
       },
-      {
-        id: "validation.identifierUnique",
-        title: "Identifier fields are unique",
-        severity: "major",
-        status: slugsWithoutUnique.length === 0 ? "pass" : "fail",
-        evidence: {
-          summary: `${slugsWithoutUnique.length} of ${slugFields.length} slug/identifier fields lack a unique constraint`,
-          detail: { fields: slugsWithoutUnique.map((f) => f.id) },
-        },
-        fixHint: "Add a unique validation to slug and identifier fields.",
-      },
+      identifierUnique,
       {
         id: "validation.requiredDiscipline",
         title: "Types declare required fields",

@@ -1,4 +1,5 @@
 import type { DimensionDefinition } from "./types.js";
+import type { EvaluateContext } from "./types.js";
 import type { CheckResult } from "../checks/index.js";
 import type { NormalizedModel } from "../model/index.js";
 import {
@@ -28,7 +29,7 @@ export const referentialIntegrityDimension: DimensionDefinition = {
   title: "Referential Integrity",
   tier: "high",
   requiredSignals: ["field.type", "field.linkTarget", "field.allowedLinkTypes", "referenceGraph"],
-  evaluate: (model: NormalizedModel): CheckResult[] => {
+  evaluate: ({ model }: EvaluateContext): CheckResult[] => {
     const stringly = allFields(model).filter(isStringlyTypedLink);
     const entryLinks = allFields(model).filter(isEntryLinkField);
     const restricted = entryLinks.filter((f) => (fieldAllowedLinkTypes(f)?.length ?? 0) > 0);

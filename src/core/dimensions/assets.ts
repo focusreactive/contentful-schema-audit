@@ -1,4 +1,5 @@
 import type { DimensionDefinition } from "./types.js";
+import type { EvaluateContext } from "./types.js";
 import type { NormalizedField, NormalizedModel } from "../model/index.js";
 import { isAssetLinkField } from "./helpers.js";
 
@@ -15,9 +16,9 @@ export const assetsDimension: DimensionDefinition = {
   title: "Asset Management",
   tier: "medium",
   requiredSignals: ["field.type", "field.linkTarget", "field.validations"],
-  isApplicable: (model) => assetFields(model).length > 0,
+  isApplicable: ({ model }) => assetFields(model).length > 0,
   applicabilityReason: "No asset/media fields in the model.",
-  evaluate: (model: NormalizedModel) => {
+  evaluate: ({ model }: EvaluateContext) => {
     const assets = assetFields(model);
     const typesWithAssets = model.contentTypes.filter((t) => t.fields.some(isAssetLinkField));
     const typesMissingAlt = typesWithAssets.filter(

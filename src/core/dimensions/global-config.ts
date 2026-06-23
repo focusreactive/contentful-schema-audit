@@ -1,4 +1,5 @@
 import type { DimensionDefinition } from "./types.js";
+import type { EvaluateContext } from "./types.js";
 import type { NormalizedModel } from "../model/index.js";
 import { SINGLETON_CONFIG_RE } from "./helpers.js";
 
@@ -14,7 +15,7 @@ export const globalConfigDimension: DimensionDefinition = {
   title: "Global Configuration",
   tier: "situational",
   requiredSignals: ["contentType.fields", "field.type"],
-  evaluate: (model: NormalizedModel) => [
+  evaluate: ({ model }: EvaluateContext) => [
     {
       id: "globalConfig.settingsType",
       title: "Centralized settings type exists",

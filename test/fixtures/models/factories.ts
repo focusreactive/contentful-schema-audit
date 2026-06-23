@@ -1,5 +1,6 @@
 import type { NormalizedContentType, NormalizedField, NormalizedModel } from "../../../src/core/model/index.js";
 import { buildReferenceGraph } from "../../../src/core/model/index.js";
+import type { SemanticAnalysis } from "../../../src/core/semantic/types.js";
 
 export function field(partial: Partial<NormalizedField> & { id: string }): NormalizedField {
   return {
@@ -32,5 +33,13 @@ export function model(partial: Partial<NormalizedModel> = {}): NormalizedModel {
     referenceGraph: partial.referenceGraph ?? buildReferenceGraph(contentTypes),
     meta: { fetchedAt: "2026-01-01T00:00:00Z", contentTypeCount: contentTypes.length, localeCount: locales.length },
     ...partial,
+  };
+}
+
+export function semantic(partial: Partial<SemanticAnalysis> = {}): SemanticAnalysis {
+  return {
+    roleMap: partial.roleMap ?? { types: {}, fields: {} },
+    judgments: partial.judgments ?? [],
+    model: partial.model ?? "test-model",
   };
 }

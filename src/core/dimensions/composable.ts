@@ -1,5 +1,5 @@
 import type { DimensionDefinition } from "./types.js";
-import type { NormalizedModel } from "../model/index.js";
+import type { EvaluateContext } from "./types.js";
 import { allFields, fieldAllowedLinkTypes } from "./helpers.js";
 
 export const composableDimension: DimensionDefinition = {
@@ -7,7 +7,7 @@ export const composableDimension: DimensionDefinition = {
   title: "Composable Content",
   tier: "situational",
   requiredSignals: ["field.type", "field.linkTarget", "field.allowedLinkTypes"],
-  evaluate: (model: NormalizedModel) => {
+  evaluate: ({ model }: EvaluateContext) => {
     const hasModularArray = allFields(model).some(
       (f) => f.type === "array" && f.items?.linkTarget === "entry" && (fieldAllowedLinkTypes(f)?.length ?? 0) > 1,
     );

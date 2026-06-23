@@ -13,10 +13,10 @@ export const seoDimension: DimensionDefinition = {
   id: "seo",
   title: "SEO Readiness",
   tier: "high",
-  requiredSignals: ["contentType.fields", "field.type"],
-  isApplicable: (model) => pageTypes(model).length > 0,
+  requiredSignals: ["contentType.fields", "field.type", "semantic.analysis"],
+  isApplicable: ({ model }) => pageTypes(model).length > 0,
   applicabilityReason: "No page-like content types to optimise for search.",
-  evaluate: (model) => {
+  evaluate: ({ model }) => {
     const pages = pageTypes(model);
     const has = (kind: Parameters<typeof isSeoField>[1]) => (t: (typeof pages)[number]) =>
       t.fields.some((f) => isSeoField(f, kind));

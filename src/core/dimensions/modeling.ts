@@ -1,6 +1,6 @@
 import type { DimensionDefinition } from "./types.js";
+import type { EvaluateContext } from "./types.js";
 import type { CheckResult } from "../checks/index.js";
-import type { NormalizedModel } from "../model/index.js";
 import { allFields, isSeoField, RICHTEXT_CANDIDATE_RE } from "./helpers.js";
 
 const RICHTEXT_MIN_RATIO = 0.7;
@@ -18,7 +18,7 @@ export const modelingDimension: DimensionDefinition = {
   title: "Content Modeling Quality",
   tier: "high",
   requiredSignals: ["contentType.fields", "field.type"],
-  evaluate: (model: NormalizedModel): CheckResult[] => {
+  evaluate: ({ model }: EvaluateContext): CheckResult[] => {
     const fields = allFields(model);
     const richCandidates = fields.filter(
       (f) => (RICHTEXT_CANDIDATE_RE.test(f.id) || RICHTEXT_CANDIDATE_RE.test(f.name)) && !isSeoField(f),

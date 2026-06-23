@@ -18,9 +18,9 @@ export const slugDimension: DimensionDefinition = {
   title: "Slug & Routing Hygiene",
   tier: "medium",
   requiredSignals: ["contentType.fields", "field.type", "field.validations"],
-  isApplicable: (model) => pageTypes(model).length > 0,
+  isApplicable: ({ model }) => pageTypes(model).length > 0,
   applicabilityReason: "No page-like content types that need routable slugs.",
-  evaluate: (model) => {
+  evaluate: ({ model }) => {
     const pages = pageTypes(model);
 
     return [

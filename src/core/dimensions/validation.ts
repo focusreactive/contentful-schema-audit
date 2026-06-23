@@ -1,6 +1,6 @@
 import type { DimensionDefinition } from "./types.js";
+import type { EvaluateContext } from "./types.js";
 import type { CheckResult } from "../checks/index.js";
-import type { NormalizedModel } from "../model/index.js";
 import { allFields, isSlugField } from "./helpers.js";
 
 const COVERAGE_MIN_RATIO = 0.5;
@@ -10,7 +10,7 @@ export const validationDimension: DimensionDefinition = {
   title: "Validation Discipline",
   tier: "medium",
   requiredSignals: ["field.validations", "field.required"],
-  evaluate: (model: NormalizedModel): CheckResult[] => {
+  evaluate: ({ model }: EvaluateContext): CheckResult[] => {
     const fields = allFields(model);
     const validated = fields.filter((f) => f.validations.length > 0);
     const coverage = fields.length === 0 ? 1 : validated.length / fields.length;

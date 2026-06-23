@@ -1,45 +1,42 @@
 import type { NormalizedModel } from "./model/index.js";
 import type { CapabilityManifest } from "./signals/index.js";
 import type { DimensionResult, OverallGrade } from "./result.js";
+import type { SemanticAnalysis } from "./semantic/types.js";
+import type { EvaluateContext } from "./dimensions/types.js";
 import { isAssessable } from "./signals/index.js";
 import { rollup, toBand } from "./checks/index.js";
 import { DIMENSIONS } from "./dimensions/index.js";
 import { TIER_WEIGHT } from "./dimensions/constants.js";
 
 const DEFAULT_UNASSESSABLE_REASON = "Required schema signals are not available from this CMS.";
+const SEMANTIC_UNAVAILABLE_REASON = "These checks need AI semantic analysis, which was unavailable.";
 
 interface ScoreNModelResult {
   overall: OverallGrade;
   dimensions: DimensionResult[];
 }
 
-export function scoreModel(model: NormalizedModel, capabilities: CapabilityManifest): ScoreNModelResult {
+export function scoreModel(
+  model: NormalizedModel,
+  capabilities: CapabilityManifest,
+  semantic?: SemanticAnalysis,
+): ScoreNModelResult {
+  const providedSignals =
+    semantic ? [...capabilities.providedSignals, "semantic.analysis" as const] : capabilities.providedSignals;
+  const ctx: EvaluateContext = { model, semantic };
+
   const dimensions: DimensionResult[] = DIMENSIONS.map((def): DimensionResult => {
     const weight = TIER_WEIGHT[def.tier];
-    const base = {
-      id: def.id,
-      title: def.title,
-      tier: def.tier,
-      weight,
-      checks: [],
-    };
+    const base = { id: def.id, title: def.title, tier: def.tier, weight, checks: [] };
 
-    if (!isAssessable(def.requiredSignals, capabilities.providedSignals)) {
-      return {
-        ...base,
-        state: "not_assessable",
-        reason: capabilities.notes?.[def.id] ?? DEFAULT_UNASSESSABLE_REASON,
-      };
+    if (!isAssessable(def.requiredSignals, providedSignals)) {
+      return { ...base, state: "not_assessable", reason: capabilities.notes?.[def.id] ?? DEFAULT_UNASSESSABLE_REASON };
+    }
+    if (def.isApplicable && !def.isApplicable(ctx)) {
+      return { ...base, state: "not_applicable", reason: def.applicabilityReason };
     }
 
-    if (def.isApplicable && !def.isApplicable(model)) {
-      return {
-        ...base,
-        state: "not_applicable",
-        reason: def.applicabilityReason,
-      };
-    }
-    const checks = def.evaluate(model);
+    const checks = def.evaluate(ctx);
     if (checks.length === 0) {
       return {
         ...base,
@@ -47,16 +44,12 @@ export function scoreModel(model: NormalizedModel, capabilities: CapabilityManif
         reason: def.applicabilityReason ?? "No checks applicable to this model.",
       };
     }
+    if (checks.every((c) => c.status === "not_assessable")) {
+      return { ...base, state: "not_assessable", checks, reason: SEMANTIC_UNAVAILABLE_REASON };
+    }
 
     const { score, band } = rollup(checks);
-
-    return {
-      ...base,
-      state: "scored",
-      score,
-      band,
-      checks,
-    };
+    return { ...base, state: "scored", score, band, checks };
   });
 
   const scored = dimensions.filter((d) => d.state === "scored");
@@ -70,7 +63,6 @@ export function scoreModel(model: NormalizedModel, capabilities: CapabilityManif
       notAssessableCount: dimensions.filter((d) => d.state === "not_assessable").length,
       notApplicableCount: dimensions.filter((d) => d.state === "not_applicable").length,
     };
-
     return { overall, dimensions };
   }
 
@@ -84,6 +76,5 @@ export function scoreModel(model: NormalizedModel, capabilities: CapabilityManif
     notAssessableCount: dimensions.filter((d) => d.state === "not_assessable").length,
     notApplicableCount: dimensions.filter((d) => d.state === "not_applicable").length,
   };
-
   return { overall, dimensions };
 }

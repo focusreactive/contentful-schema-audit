@@ -93,3 +93,20 @@ export function ratioCheck(opts: RatioCheckOpts): CheckResult {
     fixHint: opts.fixHint,
   };
 }
+
+export function notAssessableCheck(opts: {
+  id: string;
+  title: string;
+  severity: Severity;
+  reason: string;
+  fixHint: string;
+}): CheckResult {
+  return {
+    id: opts.id,
+    title: opts.title,
+    severity: opts.severity,
+    status: "not_assessable",
+    evidence: { summary: opts.reason },
+    fixHint: opts.fixHint,
+  };
+}

@@ -1,5 +1,5 @@
 import type { DimensionDefinition } from "./types.js";
-import type { NormalizedModel } from "../model/index.js";
+import type { EvaluateContext } from "./types.js";
 import { allFields } from "./helpers.js";
 
 const HIDDEN_MAX_RATIO = 0.1;
@@ -11,7 +11,7 @@ export const schemaDebtDimension: DimensionDefinition = {
   title: "Schema Debt",
   tier: "situational",
   requiredSignals: ["field.editorState", "contentType.description"],
-  evaluate: (model: NormalizedModel) => {
+  evaluate: ({ model }: EvaluateContext) => {
     const fields = allFields(model);
     const hidden = fields.filter((f) => f.editorState?.hidden);
     const hiddenRatio = fields.length === 0 ? 0 : hidden.length / fields.length;

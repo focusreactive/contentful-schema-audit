@@ -1,5 +1,5 @@
 import type { DimensionDefinition } from "./types.js";
-import type { NormalizedModel } from "../model/index.js";
+import type { EvaluateContext } from "./types.js";
 import { allFields } from "./helpers.js";
 
 export const i18nDimension: DimensionDefinition = {
@@ -7,9 +7,9 @@ export const i18nDimension: DimensionDefinition = {
   title: "Internationalization",
   tier: "situational",
   requiredSignals: ["locales", "locales.fallbackSupported", "field.localized"],
-  isApplicable: (model) => model.locales.length > 1,
+  isApplicable: ({ model }) => model.locales.length > 1,
   applicabilityReason: "Single-locale space — internationalization does not apply.",
-  evaluate: (model: NormalizedModel) => {
+  evaluate: ({ model }: EvaluateContext) => {
     const nonDefault = model.locales.filter((l) => !l.default);
     const supportsFallback = model.locales.some((l) => l.supportsFallback);
     const deadEnds = supportsFallback ? nonDefault.filter((l) => l.supportsFallback && l.fallbackCode === null) : [];

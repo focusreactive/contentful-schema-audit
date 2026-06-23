@@ -1,6 +1,6 @@
 # cms-schema-validator
 
-`cms-schema-validator` audits a Contentful content model across 10 deterministic health dimensions and produces a scored, tier-weighted report. It connects directly to the Contentful Delivery API — no management token needed — and emits both a pretty terminal summary and structured JSON. An optional AI narration layer (powered by Anthropic Claude) adds a prose summary to each dimension; this never affects the numeric grade, which is always pure and deterministic.
+`cms-schema-validator` audits a Contentful content model across 10 deterministic health dimensions and produces a scored, tier-weighted report. It connects directly to the Contentful Delivery API — no management token needed — and emits both a pretty terminal summary and structured JSON. An optional AI narration layer (powered by OpenAI) adds a prose summary to each dimension; this never affects the numeric grade, which is always pure and deterministic.
 
 ---
 
@@ -79,7 +79,7 @@ cms-validate https://example.com --token <cda-token>
 | `--space-id`      | `<id>`       | —        | Skip URL detection and audit this space directly.                                                          |
 | `--environment`   | `<env>`      | `master` | Contentful environment to audit.                                                                           |
 | `--region`        | `global\|eu` | `global` | Contentful region.                                                                                         |
-| `--no-ai`         | —            | AI on    | Skip AI narration. Use this when `ANTHROPIC_API_KEY` is not set or narration is not needed.                |
+| `--no-ai`         | —            | AI on    | Skip AI narration. Use this when `OPENAI_API_KEY` is not set or narration is not needed.                   |
 | `--json`          | —            | off      | Print JSON output only (no pretty terminal summary).                                                       |
 | `--include-model` | —            | off      | Embed the full normalized content model in the JSON output.                                                |
 | `--out`           | `<file>`     | —        | Write the JSON result to a file in addition to printing.                                                   |
@@ -88,10 +88,10 @@ cms-validate https://example.com --token <cda-token>
 
 ## AI narration
 
-When `ANTHROPIC_API_KEY` is set in the environment, the tool adds a prose explanation to each scored dimension. Narration is advisory only — it never changes the numeric score or grade.
+When `OPENAI_API_KEY` is set in the environment, the tool adds a prose explanation to each scored dimension. Narration is advisory only — it never changes the numeric score or grade.
 
 ```bash
-export ANTHROPIC_API_KEY=sk-ant-...
+export OPENAI_API_KEY=sk-...
 cms-validate --space-id <id> --token <cda-token>
 ```
 

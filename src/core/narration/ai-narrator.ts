@@ -1,20 +1,15 @@
 import { generateObject } from "ai";
-import { anthropic } from "@ai-sdk/anthropic";
+import { openai } from "@ai-sdk/openai";
 import { z } from "zod";
 import type { Narration, NarrationInput, Narrator } from "./narrator.js";
 import { buildNarrationMessages } from "./prompt.js";
 
-const DEFAULT_MODEL = "claude-opus-4-8";
-
-const findingNarrationSchema = z.object({
-  impact: z.string(),
-  fix: z.string(),
-});
+const DEFAULT_MODEL = "gpt-4.1-mini";
 
 export const narrationSchema = z.object({
   overall: z.string(),
-  dimensions: z.record(z.string(), z.string()),
-  findings: z.record(z.string(), findingNarrationSchema),
+  dimensions: z.array(z.object({ id: z.string(), narration: z.string() })),
+  findings: z.array(z.object({ id: z.string(), impact: z.string(), fix: z.string() })),
 });
 
 export function createAiNarrator(opts: { model?: string } = {}): Narrator {
@@ -24,13 +19,17 @@ export function createAiNarrator(opts: { model?: string } = {}): Narrator {
 
       try {
         const { object } = await generateObject({
-          model: anthropic(opts.model ?? DEFAULT_MODEL),
+          model: openai(opts.model ?? DEFAULT_MODEL),
           schema: narrationSchema,
           system,
           prompt,
         });
 
-        return object;
+        return {
+          overall: object.overall,
+          dimensions: Object.fromEntries(object.dimensions.map((d) => [d.id, d.narration])) as Narration["dimensions"],
+          findings: Object.fromEntries(object.findings.map((f) => [f.id, { impact: f.impact, fix: f.fix }])),
+        };
       } catch (err) {
         const message = err instanceof Error ? err.message : String(err);
 

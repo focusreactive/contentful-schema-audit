@@ -1,0 +1,645 @@
+{
+  "source": {
+    "cms": "contentful",
+    "spaceId": "tedw0580nq80",
+    "environment": "master",
+    "acquisition": "provided"
+  },
+  "overall": {
+    "score": 45,
+    "band": "poor",
+    "scoredCount": 10,
+    "notAssessableCount": 0,
+    "notApplicableCount": 0
+  },
+  "dimensions": [
+    {
+      "id": "seo",
+      "title": "SEO Readiness",
+      "tier": "high",
+      "weight": 1.5,
+      "checks": [
+        {
+          "id": "seo.title",
+          "title": "Meta title field present",
+          "severity": "major",
+          "status": "fail",
+          "evidence": {
+            "summary": "0 of 7 page-like types declare a meta-title field",
+            "affectedTypes": [
+              "post",
+              "page",
+              "category",
+              "topicProduct",
+              "componentProductTable",
+              "topicProductFeature",
+              "topicPerson"
+            ]
+          },
+          "fixHint": "Add a metaTitle field to each page-like type."
+        },
+        {
+          "id": "seo.description",
+          "title": "Meta description field present",
+          "severity": "major",
+          "status": "fail",
+          "evidence": {
+            "summary": "0 of 7 page-like types declare a meta-description field",
+            "affectedTypes": [
+              "post",
+              "page",
+              "category",
+              "topicProduct",
+              "componentProductTable",
+              "topicProductFeature",
+              "topicPerson"
+            ]
+          },
+          "fixHint": "Add a metaDescription field to each page-like type."
+        },
+        {
+          "id": "seo.canonical",
+          "title": "Canonical URL field present",
+          "severity": "critical",
+          "status": "fail",
+          "evidence": {
+            "summary": "0 of 7 page-like types declare a canonical field",
+            "affectedTypes": [
+              "post",
+              "page",
+              "category",
+              "topicProduct",
+              "componentProductTable",
+              "topicProductFeature",
+              "topicPerson"
+            ]
+          },
+          "fixHint": "Add a canonicalUrl field to each page-like type to prevent duplicate-content penalties."
+        },
+        {
+          "id": "seo.ogImage",
+          "title": "Social/OG image field present",
+          "severity": "minor",
+          "status": "fail",
+          "evidence": {
+            "summary": "0 of 7 page-like types declare a social-image field",
+            "affectedTypes": [
+              "post",
+              "page",
+              "category",
+              "topicProduct",
+              "componentProductTable",
+              "topicProductFeature",
+              "topicPerson"
+            ]
+          },
+          "fixHint": "Add an ogImage field so shared links render a preview image."
+        },
+        {
+          "id": "seo.noindex",
+          "title": "Robots/noindex control present",
+          "severity": "minor",
+          "status": "fail",
+          "evidence": {
+            "summary": "0 of 7 page-like types expose a robots/noindex control",
+            "affectedTypes": [
+              "post",
+              "page",
+              "category",
+              "topicProduct",
+              "componentProductTable",
+              "topicProductFeature",
+              "topicPerson"
+            ]
+          },
+          "fixHint": "Add a noindex/robots toggle so editors can control indexing."
+        }
+      ],
+      "state": "scored",
+      "score": 0,
+      "band": "poor"
+    },
+    {
+      "id": "modeling",
+      "title": "Content Modeling Quality",
+      "tier": "high",
+      "weight": 1.5,
+      "checks": [
+        {
+          "id": "modeling.richText",
+          "title": "Body fields use rich text",
+          "severity": "major",
+          "status": "pass",
+          "evidence": {
+            "summary": "12 of 16 body-like fields use rich text"
+          },
+          "fixHint": "Use a RichText field for body/content rather than long plain text."
+        },
+        {
+          "id": "modeling.godTypes",
+          "title": "No oversized content types",
+          "severity": "minor",
+          "status": "pass",
+          "evidence": {
+            "summary": "0 content types exceed 30 fields",
+            "affectedTypes": []
+          },
+          "fixHint": "Split content types with more than 30 fields into composable parts."
+        },
+        {
+          "id": "modeling.reuse",
+          "title": "Reusable building blocks exist",
+          "severity": "minor",
+          "status": "pass",
+          "evidence": {
+            "summary": "At least one type is reused across multiple types"
+          },
+          "fixHint": "Extract shared structures (e.g. a Link or Media block) reused by multiple types."
+        },
+        {
+          "id": "modeling.jsonFields",
+          "title": "Few escape-hatch JSON fields",
+          "severity": "minor",
+          "status": "pass",
+          "evidence": {
+            "summary": "0 of 129 fields are untyped JSON (bypass validation and localisation)",
+            "detail": {
+              "fields": []
+            }
+          },
+          "fixHint": "Replace JSON fields with typed structured fields so validation, localisation, and linking can be applied."
+        }
+      ],
+      "state": "scored",
+      "score": 100,
+      "band": "good"
+    },
+    {
+      "id": "referentialIntegrity",
+      "title": "Referential Integrity",
+      "tier": "high",
+      "weight": 1.5,
+      "checks": [
+        {
+          "id": "refs.notStringly",
+          "title": "Internal links use references, not strings",
+          "severity": "critical",
+          "status": "fail",
+          "evidence": {
+            "summary": "5 fields store links as plain strings",
+            "detail": {
+              "fields": [
+                "twitterLink",
+                "facebookLink",
+                "linkedinLink",
+                "instagramLink",
+                "urlParameters"
+              ]
+            }
+          },
+          "fixHint": "Replace free-text link fields with Link/Entry references so links can't dangle."
+        },
+        {
+          "id": "refs.linkContentType",
+          "title": "Entry links restrict their target types",
+          "severity": "major",
+          "status": "pass",
+          "evidence": {
+            "summary": "20 of 20 entry-link fields restrict allowed target types"
+          },
+          "fixHint": "Add a linkContentType validation so each reference only accepts the intended types."
+        },
+        {
+          "id": "refs.noOrphans",
+          "title": "No orphaned content types",
+          "severity": "minor",
+          "status": "fail",
+          "evidence": {
+            "summary": "6 content types are neither referenced nor referencing",
+            "affectedTypes": [
+              "redirect",
+              "topicBusinessInfo",
+              "componentQuote",
+              "componentTextBlock",
+              "topicPerson",
+              "componentInfoBlock"
+            ]
+          },
+          "fixHint": "Connect or remove content types that are not part of the reference graph."
+        }
+      ],
+      "state": "scored",
+      "score": 33,
+      "band": "poor"
+    },
+    {
+      "id": "validation",
+      "title": "Validation Discipline",
+      "tier": "medium",
+      "weight": 1,
+      "checks": [
+        {
+          "id": "validation.coverage",
+          "title": "Fields carry validations",
+          "severity": "major",
+          "status": "fail",
+          "evidence": {
+            "summary": "11 of 129 fields carry at least one validation"
+          },
+          "fixHint": "Add validations (size, regexp, range, allowed values) to constrain editor input."
+        },
+        {
+          "id": "validation.identifierUnique",
+          "title": "Identifier fields are unique",
+          "severity": "major",
+          "status": "fail",
+          "evidence": {
+            "summary": "3 of 3 slug/identifier fields lack a unique constraint",
+            "detail": {
+              "fields": [
+                "slug",
+                "slug",
+                "slug"
+              ]
+            }
+          },
+          "fixHint": "Add a unique validation to slug and identifier fields."
+        },
+        {
+          "id": "validation.requiredDiscipline",
+          "title": "Types declare required fields",
+          "severity": "minor",
+          "status": "fail",
+          "evidence": {
+            "summary": "10 content types have no required field",
+            "affectedTypes": [
+              "navigationMenu",
+              "componentQuote",
+              "footerMenu",
+              "componentProductTable",
+              "componentDuplex",
+              "componentTextBlock",
+              "componentHeroBanner",
+              "topicPerson",
+              "componentCta",
+              "componentInfoBlock"
+            ]
+          },
+          "fixHint": "Mark each type's essential fields as required."
+        }
+      ],
+      "state": "scored",
+      "score": 0,
+      "band": "poor"
+    },
+    {
+      "id": "slug",
+      "title": "Slug & Routing Hygiene",
+      "tier": "medium",
+      "weight": 1,
+      "checks": [
+        {
+          "id": "slug.present",
+          "title": "Page types have a slug field",
+          "severity": "critical",
+          "status": "fail",
+          "evidence": {
+            "summary": "3 of 7 page-like types declare a slug field",
+            "affectedTypes": [
+              "topicProduct",
+              "componentProductTable",
+              "topicProductFeature",
+              "topicPerson"
+            ]
+          },
+          "fixHint": "Add a slug field to every routable content type."
+        },
+        {
+          "id": "slug.unique",
+          "title": "Slug fields are unique",
+          "severity": "major",
+          "status": "fail",
+          "evidence": {
+            "summary": "0 of 7 page-like types have a unique slug",
+            "affectedTypes": [
+              "post",
+              "page",
+              "category",
+              "topicProduct",
+              "componentProductTable",
+              "topicProductFeature",
+              "topicPerson"
+            ]
+          },
+          "fixHint": "Add a unique validation to slug fields to prevent colliding URLs."
+        },
+        {
+          "id": "slug.pattern",
+          "title": "Slug fields are pattern-validated",
+          "severity": "minor",
+          "status": "fail",
+          "evidence": {
+            "summary": "0 of 7 page-like types pattern-validate their slug",
+            "affectedTypes": [
+              "post",
+              "page",
+              "category",
+              "topicProduct",
+              "componentProductTable",
+              "topicProductFeature",
+              "topicPerson"
+            ]
+          },
+          "fixHint": "Add a regexp validation so slugs stay URL-safe."
+        }
+      ],
+      "state": "scored",
+      "score": 0,
+      "band": "poor"
+    },
+    {
+      "id": "assets",
+      "title": "Asset Management",
+      "tier": "medium",
+      "weight": 1,
+      "checks": [
+        {
+          "id": "assets.modeledAsRef",
+          "title": "Assets modeled as references",
+          "severity": "major",
+          "status": "pass",
+          "evidence": {
+            "summary": "14 asset reference fields found"
+          },
+          "fixHint": "Reference media via Link/Asset fields rather than storing URLs as strings."
+        },
+        {
+          "id": "assets.altText",
+          "title": "Asset-owning types provide alt text",
+          "severity": "major",
+          "status": "fail",
+          "evidence": {
+            "summary": "9 of 12 asset-owning types lack an alt/caption field",
+            "affectedTypes": [
+              "siteSettings",
+              "post",
+              "author",
+              "hero",
+              "componentQuote",
+              "componentDuplex",
+              "componentHeroBanner",
+              "topicPerson",
+              "componentInfoBlock"
+            ]
+          },
+          "fixHint": "Add an alt-text or caption field next to each media field for accessibility and SEO."
+        },
+        {
+          "id": "assets.constraints",
+          "title": "Asset fields constrain size/type",
+          "severity": "minor",
+          "status": "fail",
+          "evidence": {
+            "summary": "0 of 14 asset fields enforce size/dimension/mime constraints"
+          },
+          "fixHint": "Add assetFileSize, assetImageDimensions, or mime-group validations to media fields."
+        }
+      ],
+      "state": "scored",
+      "score": 40,
+      "band": "poor"
+    },
+    {
+      "id": "i18n",
+      "title": "Internationalization",
+      "tier": "situational",
+      "weight": 0.5,
+      "checks": [
+        {
+          "id": "i18n.fallbackChain",
+          "title": "Locales have fallback chains",
+          "severity": "major",
+          "status": "pass",
+          "evidence": {
+            "summary": "0 of 1 non-default locales have no fallback",
+            "detail": {
+              "locales": []
+            }
+          },
+          "fixHint": "Set a fallbackCode on every non-default locale so missing translations degrade gracefully."
+        },
+        {
+          "id": "i18n.localizedFields",
+          "title": "Localization is actually used",
+          "severity": "minor",
+          "status": "pass",
+          "evidence": {
+            "summary": "41 fields are marked localized"
+          },
+          "fixHint": "Mark translatable fields as localized rather than configuring locales without using them."
+        }
+      ],
+      "state": "scored",
+      "score": 100,
+      "band": "good"
+    },
+    {
+      "id": "composable",
+      "title": "Composable Content",
+      "tier": "situational",
+      "weight": 0.5,
+      "checks": [
+        {
+          "id": "composable.modularArrays",
+          "title": "Modular content arrays exist",
+          "severity": "minor",
+          "status": "pass",
+          "evidence": {
+            "summary": "Multi-type entry arrays support page-builder composition"
+          },
+          "fixHint": "Model flexible layouts as arrays of multiple block types (a page-builder pattern). Note: editor UX (widgets, sidebar) is not assessable from public data."
+        }
+      ],
+      "state": "scored",
+      "score": 100,
+      "band": "good"
+    },
+    {
+      "id": "globalConfig",
+      "title": "Global Configuration",
+      "tier": "situational",
+      "weight": 0.5,
+      "checks": [
+        {
+          "id": "globalConfig.settingsType",
+          "title": "Centralized settings type exists",
+          "severity": "minor",
+          "status": "pass",
+          "evidence": {
+            "summary": "A site-settings/config type is present"
+          },
+          "fixHint": "Add a singleton settings type for global config instead of hardcoding values."
+        },
+        {
+          "id": "globalConfig.navModeled",
+          "title": "Navigation is modeled as content",
+          "severity": "minor",
+          "status": "pass",
+          "evidence": {
+            "summary": "Navigation/menu is modeled"
+          },
+          "fixHint": "Model navigation as content so editors can manage menus without code changes."
+        },
+        {
+          "id": "globalConfig.redirects",
+          "title": "Redirects are modeled as entries",
+          "severity": "minor",
+          "status": "pass",
+          "evidence": {
+            "summary": "A redirect type is present"
+          },
+          "fixHint": "Model redirects as entries so editors can manage them in the CMS."
+        }
+      ],
+      "state": "scored",
+      "score": 100,
+      "band": "good"
+    },
+    {
+      "id": "schemaDebt",
+      "title": "Schema Debt",
+      "tier": "situational",
+      "weight": 0.5,
+      "checks": [
+        {
+          "id": "schemaDebt.hiddenFields",
+          "title": "Few hidden/read-only fields",
+          "severity": "major",
+          "status": "pass",
+          "evidence": {
+            "summary": "1 of 129 fields are hidden from editors"
+          },
+          "fixHint": "Remove hidden fields once migrations are complete rather than leaving dead schema visible only via the API."
+        },
+        {
+          "id": "schemaDebt.naming",
+          "title": "Consistent field naming",
+          "severity": "minor",
+          "status": "pass",
+          "evidence": {
+            "summary": "100% of field ids follow a single casing convention"
+          },
+          "fixHint": "Adopt one casing convention (camelCase) across all field ids."
+        },
+        {
+          "id": "schemaDebt.noDescription",
+          "title": "Content types have descriptions",
+          "severity": "minor",
+          "status": "fail",
+          "evidence": {
+            "summary": "11 of 25 content types lack a description",
+            "affectedTypes": [
+              "siteSettings",
+              "redirect",
+              "navigation",
+              "post",
+              "page",
+              "category",
+              "author",
+              "richTextSection",
+              "hero",
+              "link",
+              "seo"
+            ]
+          },
+          "fixHint": "Add a description to each content type so editors know when and how to use it."
+        }
+      ],
+      "state": "scored",
+      "score": 75,
+      "band": "warn"
+    }
+  ],
+  "narration": {
+    "overall": "The CMS schema shows strong content modeling, internationalization, composable content, and global configuration practices, which is excellent for maintainability and scalability. However, critical SEO readiness and slug hygiene issues severely limit search engine visibility and URL reliability, risking poor organic traffic and user experience. Referential integrity and validation discipline are also weak, increasing the chance of broken links and inconsistent data entry. Asset management needs improvement for accessibility and media control. Addressing these will enhance SEO performance, content quality, and site robustness.",
+    "dimensions": {
+      "seo": "SEO readiness is poor due to missing meta fields and canonical URLs, risking search ranking and duplicate content penalties.",
+      "modeling": "Content modeling quality is good, ensuring a solid structural foundation.",
+      "referentialIntegrity": "Referential integrity is poor, with dangling links and orphaned content types that can cause broken navigation.",
+      "validation": "Validation discipline is poor, allowing inconsistent and potentially invalid content input.",
+      "slug": "Slug and routing hygiene is poor, risking URL conflicts and routing errors.",
+      "assets": "Asset management is poor, lacking alt text for accessibility and constraints for media quality control.",
+      "i18n": "Internationalization is well implemented, supporting multiple languages effectively.",
+      "composable": "Composable content is well designed, enabling flexible content assembly.",
+      "globalConfig": "Global configuration is well managed, supporting consistent site-wide settings.",
+      "schemaDebt": "Schema debt is moderate, with missing content type descriptions that reduce editor clarity."
+    },
+    "findings": {
+      "seo.title": {
+        "impact": "Without meta title fields, pages lack optimized titles for search engines, reducing click-through rates and ranking potential.",
+        "fix": "Add a metaTitle field to each page-like content type (post, page, category, topicProduct, componentProductTable, topicProductFeature, topicPerson) to enable custom SEO titles."
+      },
+      "seo.description": {
+        "impact": "Missing meta description fields prevent crafting summaries that improve search snippet appeal, lowering user engagement from search results.",
+        "fix": "Add a metaDescription field to each page-like content type to allow editors to write descriptive summaries for SEO."
+      },
+      "seo.canonical": {
+        "impact": "Absence of canonical URL fields risks duplicate content penalties from search engines, harming SEO rankings.",
+        "fix": "Add a canonicalUrl field to each page-like content type to specify the preferred URL and avoid duplicate content issues."
+      },
+      "seo.ogImage": {
+        "impact": "Without social/OG image fields, shared links lack preview images, reducing social media engagement and click-throughs.",
+        "fix": "Add an ogImage field to each page-like content type to enable rich link previews on social platforms."
+      },
+      "seo.noindex": {
+        "impact": "Lack of robots/noindex controls prevents editors from managing page indexing, risking unwanted pages appearing in search results.",
+        "fix": "Add a noindex/robots toggle field to each page-like content type to control search engine indexing on a per-page basis."
+      },
+      "refs.notStringly": {
+        "impact": "Using plain strings for internal links increases the risk of broken links and poor content integrity, harming user experience and SEO.",
+        "fix": "Replace free-text link fields with reference fields linking to entries to ensure link validity and maintain referential integrity."
+      },
+      "refs.noOrphans": {
+        "impact": "Orphaned content types that neither reference nor are referenced can become unused or forgotten, cluttering the CMS and confusing editors.",
+        "fix": "Connect orphaned content types (redirect, topicBusinessInfo, componentQuote, componentTextBlock, topicPerson, componentInfoBlock) into the reference graph or remove them if obsolete."
+      },
+      "validation.coverage": {
+        "impact": "Low validation coverage allows inconsistent or invalid data entry, leading to content errors and poor user experience.",
+        "fix": "Add appropriate validations (size, regexp, range, allowed values) to fields to constrain editor input and ensure data quality."
+      },
+      "validation.identifierUnique": {
+        "impact": "Non-unique slug/identifier fields risk URL conflicts and content ambiguity, harming SEO and navigation.",
+        "fix": "Add unique constraints to all slug and identifier fields to guarantee distinct URLs and identifiers."
+      },
+      "validation.requiredDiscipline": {
+        "impact": "Content types without required fields allow incomplete entries, reducing content reliability and editorial clarity.",
+        "fix": "Mark essential fields as required in all content types lacking them to enforce completeness."
+      },
+      "slug.present": {
+        "impact": "Missing slug fields on routable content types prevent proper URL generation, breaking site navigation and SEO.",
+        "fix": "Add a slug field to every routable content type (topicProduct, componentProductTable, topicProductFeature, topicPerson) to enable URL routing."
+      },
+      "slug.unique": {
+        "impact": "Non-unique slugs cause URL collisions, confusing users and search engines, and harming SEO.",
+        "fix": "Add unique validations to slug fields on all page-like types to prevent duplicate URLs."
+      },
+      "slug.pattern": {
+        "impact": "Without pattern validation, slugs may contain invalid characters, causing broken links and SEO issues.",
+        "fix": "Add regexp validations to slug fields to ensure URL-safe slugs across all page-like types."
+      },
+      "assets.altText": {
+        "impact": "Lack of alt text on media assets reduces accessibility for users with disabilities and misses SEO image optimization opportunities.",
+        "fix": "Add alt-text or caption fields next to media fields in asset-owning types to improve accessibility and SEO."
+      },
+      "assets.constraints": {
+        "impact": "Unconstrained asset fields risk oversized or incompatible media, affecting site performance and user experience.",
+        "fix": "Add file size, image dimension, or mime-type validations to media fields to enforce quality and performance standards."
+      },
+      "schemaDebt.noDescription": {
+        "impact": "Missing content type descriptions reduce editor understanding, increasing errors and slowing content creation.",
+        "fix": "Add clear descriptions to all content types lacking them to guide editors on their purpose and usage."
+      }
+    }
+  },
+  "generatedAt": "2026-06-23T08:12:59.537Z"
+}

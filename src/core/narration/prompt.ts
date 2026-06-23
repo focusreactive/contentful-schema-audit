@@ -5,6 +5,9 @@ const SYSTEM_PROMPT = [
   "Explain each finding's business and SEO impact in plain language, then give a concrete fix.",
   "Use ONLY the findings provided. Never invent fields, types, or numbers, and never contradict the scores.",
   "Be concise and specific.",
+  "Write an `overall` summary of the whole report.",
+  "Add one `dimensions` entry per dimension, reusing its `id`, with a one-line narration.",
+  "Add one `findings` entry per failed check, reusing its `id`, with an `impact` and a `fix`.",
 ].join(" ");
 
 interface NarrationMessagesResult {

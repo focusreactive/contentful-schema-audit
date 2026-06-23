@@ -1,5 +1,5 @@
 import { scoreModel } from "./scoring.js";
-import { type, model } from "../../test/fixtures/models/factories.js";
+import { type, model, semantic } from "../../test/fixtures/models/factories.js";
 import type { CapabilityManifest } from "./signals/index.js";
 
 const allSignals: CapabilityManifest = {
@@ -37,5 +37,16 @@ describe("scoreModel", () => {
     const result = scoreModel(model({ contentTypes: [type({ id: "article" })] }), noSignals);
     expect(result.overall.score).toBeNull();
     expect(result.overall.band).toBe("not_assessed");
+  });
+});
+
+describe("scoreModel semantic wiring", () => {
+  it("adds semantic.analysis to provided signals only when analysis is supplied", () => {
+    const m = model({ contentTypes: [type({ id: "article" })] });
+    const withoutAi = scoreModel(m, allSignals);
+    const withAi = scoreModel(m, allSignals, semantic());
+    expect(withoutAi.dimensions.find((d) => d.id === "seo")?.state).toBe("not_assessable");
+    // seo becomes assessable (here: not_applicable, since no page role is present in the empty stub)
+    expect(withAi.dimensions.find((d) => d.id === "seo")?.state).not.toBe("not_assessable");
   });
 });

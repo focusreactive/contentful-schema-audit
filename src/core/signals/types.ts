@@ -28,7 +28,8 @@ export type Signal =
   | "locales.fallbackCode"
   | "locales.fallbackSupported"
   | "referenceGraph"
-  | "entries.sample";
+  | "entries.sample"
+  | "semantic.analysis";
 
 export interface CapabilityManifest {
   cms: CmsId;

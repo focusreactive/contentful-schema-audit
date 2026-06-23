@@ -1,6 +1,6 @@
 export type Severity = "critical" | "major" | "minor";
 
-export type CheckStatus = "pass" | "fail";
+export type CheckStatus = "pass" | "fail" | "not_assessable";
 export type Band = "good" | "warn" | "poor";
 
 export interface CheckEvidence {

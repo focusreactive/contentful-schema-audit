@@ -1,25 +1,24 @@
 import type { DimensionDefinition } from "./types.js";
-import type { NormalizedModel } from "../model/index.js";
-import { isPageLikeType, isSeoField, ratioCheck } from "./helpers.js";
+import type { FieldRole } from "../semantic/types.js";
+import { pageTypes, ratioCheck } from "./helpers.js";
+import { fieldHasRole } from "../semantic/roles.js";
 
 const PRESENCE_THRESHOLD = 0.8;
 const NOINDEX_THRESHOLD = 0.5;
-
-function pageTypes(model: NormalizedModel) {
-  return model.contentTypes.filter(isPageLikeType);
-}
 
 export const seoDimension: DimensionDefinition = {
   id: "seo",
   title: "SEO Readiness",
   tier: "high",
-  requiredSignals: ["contentType.fields", "field.type"],
-  isApplicable: (model) => pageTypes(model).length > 0,
+  requiredSignals: ["contentType.fields", "field.type", "semantic.analysis"],
+  isApplicable: (ctx) => pageTypes(ctx).length > 0,
   applicabilityReason: "No page-like content types to optimise for search.",
-  evaluate: (model) => {
-    const pages = pageTypes(model);
-    const has = (kind: Parameters<typeof isSeoField>[1]) => (t: (typeof pages)[number]) =>
-      t.fields.some((f) => isSeoField(f, kind));
+  evaluate: (ctx) => {
+    const { semantic } = ctx;
+    if (!semantic) return [];
+    const pages = pageTypes(ctx);
+    const has = (role: FieldRole) => (t: (typeof pages)[number]) =>
+      t.fields.some((f) => fieldHasRole(semantic, t.id, f.id, role));
 
     return [
       ratioCheck({
@@ -27,7 +26,7 @@ export const seoDimension: DimensionDefinition = {
         title: "Meta title field present",
         severity: "major",
         units: pages,
-        satisfies: has("title"),
+        satisfies: has("metaTitle"),
         threshold: PRESENCE_THRESHOLD,
         fixHint: "Add a metaTitle field to each page-like type.",
         describe: (fail, total) => `${total - fail} of ${total} page-like types declare a meta-title field`,
@@ -37,7 +36,7 @@ export const seoDimension: DimensionDefinition = {
         title: "Meta description field present",
         severity: "major",
         units: pages,
-        satisfies: has("description"),
+        satisfies: has("metaDescription"),
         threshold: PRESENCE_THRESHOLD,
         fixHint: "Add a metaDescription field to each page-like type.",
         describe: (fail, total) => `${total - fail} of ${total} page-like types declare a meta-description field`,

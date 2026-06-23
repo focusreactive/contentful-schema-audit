@@ -17,10 +17,16 @@ interface RollupResult {
 }
 
 export function rollup(checks: CheckResult[]): RollupResult {
-  if (checks.length === 0) return { score: 100, band: "good" };
+  const scorable = checks.filter((c) => c.status !== "not_assessable");
+  if (scorable.length === 0) {
+    return {
+      score: 100,
+      band: "good",
+    };
+  }
 
-  const total = checks.reduce((sum, c) => sum + SEVERITY_WEIGHT[c.severity], 0);
-  const passed = checks.filter((c) => c.status === "pass").reduce((sum, c) => sum + SEVERITY_WEIGHT[c.severity], 0);
+  const total = scorable.reduce((sum, c) => sum + SEVERITY_WEIGHT[c.severity], 0);
+  const passed = scorable.filter((c) => c.status === "pass").reduce((sum, c) => sum + SEVERITY_WEIGHT[c.severity], 0);
   const score = Math.round((passed / total) * 100);
 
   return {

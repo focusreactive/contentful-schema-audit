@@ -35,8 +35,9 @@ function scoreLine(d: DimensionResult): string {
 
 function checksLine(d: DimensionResult): string {
   if (d.state !== "scored") return "—";
-  const passed = d.checks.filter((c) => c.status === "pass").length;
-  return `${passed} of ${d.checks.length} passed`;
+  const assessable = d.checks.filter((c) => c.status !== "not_assessable");
+  const passed = assessable.filter((c) => c.status === "pass").length;
+  return `${passed} of ${assessable.length} passed`;
 }
 
 function skipVerdict(d: DimensionResult): string {

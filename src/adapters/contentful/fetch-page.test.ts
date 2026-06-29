@@ -29,6 +29,7 @@ describe("fetchPage", () => {
     const page = {
       on: () => {},
       goto: async () => undefined,
+      waitForLoadState: async () => undefined,
       url: () => "https://site.com/final",
       content: async () => {
         // Resolve on a later tick so a premature close() in `finally` would win the race.

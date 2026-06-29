@@ -19,7 +19,32 @@ describe("detectContentful", () => {
     expect(result.spaceId).toBe("euspace1234");
   });
 
-  it("returns no match when no ctfassets host is present", () => {
+  it("extracts the space id from a Content Delivery API request", () => {
+    const result = detectContentful(
+      page({
+        requests: [
+          {
+            url: "https://cdn.contentful.com/spaces/qlpjwgocwz50/environments/master/entries?content_type=media&limit=10",
+            method: "GET",
+            headers: {},
+          },
+        ],
+      }),
+    );
+    expect(result.isMatch).toBe(true);
+    expect(result.spaceId).toBe("qlpjwgocwz50");
+    expect(result.region).toBe("global");
+  });
+
+  it("detects the Content Preview API host", () => {
+    const result = detectContentful(
+      page({ scripts: ["fetch('https://preview.contentful.com/spaces/prev12345/environments/master/entries')"] }),
+    );
+    expect(result.isMatch).toBe(true);
+    expect(result.spaceId).toBe("prev12345");
+  });
+
+  it("returns no match when no Contentful host is present", () => {
     expect(detectContentful(page({ html: "<img src='/local.png'>" })).isMatch).toBe(false);
   });
 });

@@ -3,6 +3,7 @@ import type { BrowserContext, Page } from "playwright";
 import type { FetchedPage, ObservedRequest } from "../../core/adapter.js";
 
 const NAVIGATION_TIMEOUT_MS = 30_000;
+const SETTLE_TIMEOUT_MS = 8_000;
 const SCRIPT_HOST_RE = /\.contentful\.com|\.ctfassets\.net/i;
 
 export async function collectFetchedPage(
@@ -50,9 +51,13 @@ export async function fetchPage(url: string): Promise<FetchedPage> {
       }
     });
 
-    await page.goto(url, { waitUntil: "networkidle", timeout: NAVIGATION_TIMEOUT_MS });
+    await page.goto(url, { waitUntil: "domcontentloaded", timeout: NAVIGATION_TIMEOUT_MS });
 
-    return await collectFetchedPage(url, page, requests, scripts);
+    await page.waitForLoadState("networkidle", { timeout: SETTLE_TIMEOUT_MS }).catch(() => {});
+
+    const fetchedPage = await collectFetchedPage(url, page, requests, scripts);
+
+    return fetchedPage;
   } finally {
     await context?.close();
     await browser.close();

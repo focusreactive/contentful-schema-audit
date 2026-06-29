@@ -52,7 +52,7 @@ export async function fetchPage(url: string): Promise<FetchedPage> {
 
     await page.goto(url, { waitUntil: "networkidle", timeout: NAVIGATION_TIMEOUT_MS });
 
-    return collectFetchedPage(url, page, requests, scripts);
+    return await collectFetchedPage(url, page, requests, scripts);
   } finally {
     await context?.close();
     await browser.close();

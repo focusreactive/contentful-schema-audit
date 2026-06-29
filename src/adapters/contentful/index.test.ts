@@ -37,3 +37,59 @@ describe("contentfulAdapter.capabilities", () => {
     expect(caps.notes?.composable).toMatch(/management token/i);
   });
 });
+
+describe("contentfulAdapter.acquireAccess debug logging", () => {
+  const pageWithToken: FetchedPage = {
+    url: "x",
+    finalUrl: "x",
+    html: "",
+    scripts: [],
+    requests: [
+      { url: "https://cdn.contentful.com/spaces/sp/entries?access_token=sniffedToken123", method: "GET", headers: {} },
+    ],
+  };
+
+  it("logs provided-flag sources for spaceId and token when debug is on", async () => {
+    const spy = vi.spyOn(process.stderr, "write").mockReturnValue(true);
+    await contentfulAdapter.acquireAccess(
+      { isMatch: true, region: "global", signals: [] },
+      { page: emptyPage, providedSpaceId: "sp", providedToken: "tok", debug: true },
+    );
+    expect(spy).toHaveBeenCalledWith("[contentful] detect field=spaceId value=sp source=provided-flag\n");
+    expect(spy).toHaveBeenCalledWith("[contentful] detect field=token value=tok source=provided-flag\n");
+    spy.mockRestore();
+  });
+
+  it("logs the detected spaceId source and the sniffed token source", async () => {
+    const spy = vi.spyOn(process.stderr, "write").mockReturnValue(true);
+    await contentfulAdapter.acquireAccess(
+      { isMatch: true, spaceId: "sp", spaceIdSource: "asset-host", region: "global", signals: [] },
+      { page: pageWithToken, debug: true },
+    );
+    expect(spy).toHaveBeenCalledWith("[contentful] detect field=spaceId value=sp source=asset-host\n");
+    expect(spy).toHaveBeenCalledWith("[contentful] detect field=token value=sniffedToken123 source=query-param\n");
+    spy.mockRestore();
+  });
+
+  it("logs the token not-found line before throwing AccessError", async () => {
+    const spy = vi.spyOn(process.stderr, "write").mockReturnValue(true);
+    await expect(
+      contentfulAdapter.acquireAccess(
+        { isMatch: true, spaceId: "sp", spaceIdSource: "asset-host", region: "global", signals: [] },
+        { page: emptyPage, debug: true },
+      ),
+    ).rejects.toBeInstanceOf(AccessError);
+    expect(spy).toHaveBeenCalledWith("[contentful] detect field=token value=<none> source=not-found\n");
+    spy.mockRestore();
+  });
+
+  it("writes nothing when debug is off", async () => {
+    const spy = vi.spyOn(process.stderr, "write").mockReturnValue(true);
+    await contentfulAdapter.acquireAccess(
+      { isMatch: true, spaceId: "sp", spaceIdSource: "asset-host", region: "global", signals: [] },
+      { page: pageWithToken },
+    );
+    expect(spy).not.toHaveBeenCalled();
+    spy.mockRestore();
+  });
+});

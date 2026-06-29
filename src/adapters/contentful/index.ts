@@ -3,6 +3,7 @@ import type { CapabilityManifest, Signal } from "../../core/signals/index.js";
 import type { NormalizedModel } from "../../core/model/index.js";
 import { detectContentful } from "./detect.js";
 import { sniffToken } from "./sniff-token.js";
+import { logDetection } from "./log.js";
 import { fetchContentTypes, fetchLocales } from "./cda-client.js";
 import { normalize } from "./normalize.js";
 
@@ -48,12 +49,21 @@ export const contentfulAdapter: CmsAdapter = {
   },
 
   async acquireAccess(detect: DetectResult, opts: AcquireOpts): Promise<Access> {
+    const debug = opts.debug ?? false;
+
     const spaceId = opts.providedSpaceId ?? detect.spaceId;
+    logDetection(
+      debug,
+      "spaceId",
+      spaceId,
+      opts.providedSpaceId ? "provided-flag" : (detect.spaceIdSource ?? "not-found"),
+    );
     if (!spaceId) throw new AccessError("No Contentful space id detected. Pass --space-id.");
 
     const environment = opts.environment ?? DEFAULT_ENVIRONMENT;
 
     if (opts.providedToken) {
+      logDetection(debug, "token", opts.providedToken, "provided-flag");
       return {
         spaceId,
         environment,
@@ -64,6 +74,7 @@ export const contentfulAdapter: CmsAdapter = {
     }
 
     const sniffed = sniffToken(opts.page);
+    logDetection(debug, "token", sniffed.token, sniffed.source ?? "not-found");
     if (sniffed.token) {
       return {
         spaceId,

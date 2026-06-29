@@ -20,4 +20,9 @@ describe("parseArgs", () => {
     const args = parseArgs(["node", "cli", "https://site.com"]);
     expect(args.report).toBeUndefined();
   });
+
+  it("defaults debug to false and enables it with --debug", () => {
+    expect(parseArgs(["node", "cli", "https://site.com"]).debug).toBe(false);
+    expect(parseArgs(["node", "cli", "https://site.com", "--debug"]).debug).toBe(true);
+  });
 });

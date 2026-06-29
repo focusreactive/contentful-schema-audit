@@ -18,6 +18,7 @@ export interface FetchedPage {
 export interface DetectResult {
   isMatch: boolean;
   spaceId?: string;
+  spaceIdSource?: "asset-host" | "api-host";
   region?: "global" | "eu";
   signals: string[];
 }
@@ -36,6 +37,7 @@ export interface AcquireOpts {
   providedSpaceId?: string;
   environment?: string;
   region?: "global" | "eu";
+  debug?: boolean;
 }
 
 export interface CmsAdapter {

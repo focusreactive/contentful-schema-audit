@@ -13,6 +13,7 @@ export interface RunArgs {
   region?: "global" | "eu";
   ai: boolean;
   includeModel: boolean;
+  debug?: boolean;
 }
 
 export interface RunDeps {
@@ -50,6 +51,7 @@ export async function run(args: RunArgs, deps: RunDeps): Promise<ValidationResul
     providedSpaceId: args.spaceId,
     environment: args.environment,
     region: args.region,
+    debug: args.debug,
   });
 
   const fetchedModel = await deps.adapter.fetchModel(access);

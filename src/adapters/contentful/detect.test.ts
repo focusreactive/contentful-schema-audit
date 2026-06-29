@@ -11,12 +11,14 @@ describe("detectContentful", () => {
     expect(result.isMatch).toBe(true);
     expect(result.spaceId).toBe("yadj1kx9rmg0");
     expect(result.region).toBe("global");
+    expect(result.spaceIdSource).toBe("asset-host");
   });
 
   it("detects the EU asset domain", () => {
     const result = detectContentful(page({ scripts: ["https://images.eu.ctfassets.net/euspace1234/a/b/c.jpg"] }));
     expect(result.region).toBe("eu");
     expect(result.spaceId).toBe("euspace1234");
+    expect(result.spaceIdSource).toBe("asset-host");
   });
 
   it("extracts the space id from a Content Delivery API request", () => {
@@ -34,6 +36,7 @@ describe("detectContentful", () => {
     expect(result.isMatch).toBe(true);
     expect(result.spaceId).toBe("qlpjwgocwz50");
     expect(result.region).toBe("global");
+    expect(result.spaceIdSource).toBe("api-host");
   });
 
   it("detects the Content Preview API host", () => {
@@ -42,6 +45,7 @@ describe("detectContentful", () => {
     );
     expect(result.isMatch).toBe(true);
     expect(result.spaceId).toBe("prev12345");
+    expect(result.spaceIdSource).toBe("api-host");
   });
 
   it("returns no match when no Contentful host is present", () => {

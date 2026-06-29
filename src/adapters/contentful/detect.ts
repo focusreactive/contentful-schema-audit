@@ -11,6 +11,7 @@ export function detectContentful(page: FetchedPage): DetectResult {
     return {
       isMatch: true,
       spaceId: assetMatch[2],
+      spaceIdSource: "asset-host",
       region: assetMatch[1] ? "eu" : "global",
       signals: [`Found Contentful asset host: ${assetMatch[0]}`],
     };
@@ -21,6 +22,7 @@ export function detectContentful(page: FetchedPage): DetectResult {
     return {
       isMatch: true,
       spaceId: apiMatch[1],
+      spaceIdSource: "api-host",
       region: "global",
       signals: [`Found Contentful API host: ${apiMatch[0]}`],
     };

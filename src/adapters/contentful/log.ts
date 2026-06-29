@@ -6,6 +6,11 @@ export type DetectionSource =
   | "api-host"
   | "query-param"
   | "bearer-header"
+  | "post-body"
+  | "response-body"
+  | "local-storage"
+  | "session-storage"
+  | "cookie"
   | "page-body"
   | "not-found";
 

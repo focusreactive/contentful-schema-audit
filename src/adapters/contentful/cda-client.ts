@@ -53,3 +53,14 @@ export async function fetchLocales(access: Access, deps: CdaDeps = { fetch }): P
 
   return localesResponseSchema.parse(await getJson(url, access.deliveryToken, deps)).items;
 }
+
+export async function validateDeliveryToken(
+  spaceId: string,
+  region: "global" | "eu",
+  token: string,
+  deps: CdaDeps = { fetch },
+): Promise<boolean> {
+  const response = await deps.fetch(`https://${HOST_BY_REGION[region]}/spaces/${spaceId}?access_token=${token}`);
+
+  return response.ok;
+}

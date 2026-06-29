@@ -6,7 +6,7 @@ import { model, type, semantic } from "../../test/fixtures/models/factories.js";
 import type { CmsAdapter, FetchedPage } from "../core/adapter.js";
 import type { SemanticAnalyzer } from "../core/semantic/types.js";
 
-const fetchedPage: FetchedPage = { url: "https://site.com", finalUrl: "https://site.com", html: "", scripts: [], requests: [] };
+const fetchedPage: FetchedPage = { url: "https://site.com", finalUrl: "https://site.com", html: "", scripts: [], requests: [], responseBodies: [], cookies: [], storage: { local: {}, session: {} } };
 
 const stubAdapter: CmsAdapter = {
   id: "contentful",

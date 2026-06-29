@@ -1,4 +1,4 @@
-import { fetchContentTypes, PAGE_LIMIT } from "./cda-client.js";
+import { fetchContentTypes, PAGE_LIMIT, validateDeliveryToken } from "./cda-client.js";
 import type { Access } from "../../core/adapter.js";
 
 const access: Access = { spaceId: "x", environment: "master", deliveryToken: "t", region: "global", acquisition: "provided" };
@@ -26,5 +26,19 @@ describe("fetchContentTypes", () => {
   it("throws a typed error on a 401", async () => {
     const fetch = vi.fn(async () => new Response("nope", { status: 401 }));
     await expect(fetchContentTypes(access, { fetch })).rejects.toThrow(/401/);
+  });
+});
+
+describe("validateDeliveryToken", () => {
+  it("returns true on a 200 and hits the regional space root with the token", async () => {
+    const fetch = vi.fn(async () => new Response("{}", { status: 200 }));
+    const ok = await validateDeliveryToken("sp", "eu", "tok123456789", { fetch });
+    expect(ok).toBe(true);
+    expect(fetch).toHaveBeenCalledWith("https://cdn.eu.contentful.com/spaces/sp?access_token=tok123456789");
+  });
+
+  it("returns false on a non-2xx", async () => {
+    const fetch = vi.fn(async () => new Response("nope", { status: 401 }));
+    expect(await validateDeliveryToken("sp", "global", "bad", { fetch })).toBe(false);
   });
 });

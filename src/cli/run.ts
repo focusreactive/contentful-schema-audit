@@ -30,6 +30,12 @@ const EMPTY_PAGE: FetchedPage = {
   html: "",
   scripts: [],
   requests: [],
+  responseBodies: [],
+  cookies: [],
+  storage: {
+    local: {},
+    session: {},
+  },
 };
 
 export async function run(args: RunArgs, deps: RunDeps): Promise<ValidationResult> {

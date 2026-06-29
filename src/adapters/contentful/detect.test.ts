@@ -2,7 +2,7 @@ import { detectContentful } from "./detect.js";
 import type { FetchedPage } from "../../core/adapter.js";
 
 function page(partial: Partial<FetchedPage>): FetchedPage {
-  return { url: "https://site.com", finalUrl: "https://site.com", html: "", scripts: [], requests: [], ...partial };
+  return { url: "https://site.com", finalUrl: "https://site.com", html: "", scripts: [], requests: [], responseBodies: [], cookies: [], storage: { local: {}, session: {} }, ...partial };
 }
 
 describe("detectContentful", () => {

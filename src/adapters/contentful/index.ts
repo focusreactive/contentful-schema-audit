@@ -2,9 +2,9 @@ import type { CmsAdapter, Access, AcquireOpts, DetectResult, FetchedPage } from 
 import type { CapabilityManifest, Signal } from "../../core/signals/index.js";
 import type { NormalizedModel } from "../../core/model/index.js";
 import { detectContentful } from "./detect.js";
-import { sniffToken } from "./sniff-token.js";
+import { collectTokenCandidates, MAX_CANDIDATES } from "./sniff-token.js";
 import { logDetection } from "./log.js";
-import { fetchContentTypes, fetchLocales } from "./cda-client.js";
+import { fetchContentTypes, fetchLocales, validateDeliveryToken } from "./cda-client.js";
 import { normalize } from "./normalize.js";
 
 const DEFAULT_ENVIRONMENT = "master";
@@ -73,20 +73,39 @@ export const contentfulAdapter: CmsAdapter = {
       };
     }
 
-    const sniffed = sniffToken(opts.page);
-    logDetection(debug, "token", sniffed.token, sniffed.source ?? "not-found");
-    if (sniffed.token) {
-      return {
-        spaceId,
-        environment,
-        deliveryToken: sniffed.token,
-        region: opts.region ?? detect.region ?? sniffed.region,
-        acquisition: "sniffed",
-      };
+    const candidates = collectTokenCandidates(opts.page);
+    const considered = candidates.slice(0, MAX_CANDIDATES);
+    if (debug && candidates.length > considered.length) {
+      process.stderr.write(
+        `[contentful] token candidates truncated: ${candidates.length} found, trying first ${considered.length}\n`,
+      );
     }
 
+    for (const candidate of considered) {
+      const probeRegion = opts.region ?? detect.region ?? candidate.region;
+      const valid = await validateDeliveryToken(spaceId, probeRegion, candidate.token);
+
+      if (debug) {
+        process.stderr.write(
+          `[contentful] token probe source=${candidate.source} result=${valid ? "valid" : "invalid"}\n`,
+        );
+      }
+
+      if (valid) {
+        logDetection(debug, "token", candidate.token, candidate.source);
+        return {
+          spaceId,
+          environment,
+          deliveryToken: candidate.token,
+          region: probeRegion,
+          acquisition: "sniffed",
+        };
+      }
+    }
+
+    logDetection(debug, "token", undefined, "not-found");
     throw new AccessError(
-      "Could not find a Contentful delivery token on the site. Pass --token with a read-only delivery token.",
+      `Could not find a valid Contentful delivery token on the site (tried ${considered.length} candidate(s)). Pass --token with a read-only delivery token.`,
     );
   },
 

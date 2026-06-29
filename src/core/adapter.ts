@@ -5,6 +5,7 @@ export interface ObservedRequest {
   url: string;
   method: string;
   headers: Record<string, string>;
+  postData?: string;
 }
 
 export interface FetchedPage {
@@ -13,6 +14,15 @@ export interface FetchedPage {
   html: string;
   scripts: string[];
   requests: ObservedRequest[];
+  responseBodies: string[];
+  cookies: {
+    name: string;
+    value: string;
+  }[];
+  storage: {
+    local: Record<string, string>;
+    session: Record<string, string>;
+  };
 }
 
 export interface DetectResult {

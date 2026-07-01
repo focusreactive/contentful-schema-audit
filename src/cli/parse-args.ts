@@ -18,6 +18,7 @@ export function parseArgs(argv: string[]): CliArgs {
     .option("--no-ai", "skip AI narration")
     .option("--json", "print JSON only")
     .option("--include-model", "embed the normalized model in the JSON")
+    .option("--include-raw-schema", "embed the raw, un-normalized CMS schema in the JSON")
     .option("--debug", "print detection diagnostics (spaceId, token + source) to stderr")
     .option("--out <file>", "write the JSON result to a file")
     .option("--report <file>", "write a Markdown report to a file")
@@ -35,6 +36,7 @@ export function parseArgs(argv: string[]): CliArgs {
     region: opts.region === "eu" ? "eu" : "global",
     ai: opts.ai !== false,
     includeModel: Boolean(opts.includeModel),
+    includeRawSchema: Boolean(opts.includeRawSchema),
     debug: Boolean(opts.debug),
     json: Boolean(opts.json),
     out: opts.out,

@@ -73,16 +73,18 @@ cms-validate https://example.com --token <cda-token>
 
 ### Flag reference
 
-| Flag              | Argument     | Default  | Description                                                                                                |
-| ----------------- | ------------ | -------- | ---------------------------------------------------------------------------------------------------------- |
-| `--token`         | `<token>`    | —        | CDA delivery token. Falls back when token sniffing fails (URL mode) or replaces it entirely (direct mode). |
-| `--space-id`      | `<id>`       | —        | Skip URL detection and audit this space directly.                                                          |
-| `--environment`   | `<env>`      | `master` | Contentful environment to audit.                                                                           |
-| `--region`        | `global\|eu` | `global` | Contentful region.                                                                                         |
-| `--no-ai`         | —            | AI on    | Skip AI narration. Use this when `OPENAI_API_KEY` is not set or narration is not needed.                   |
-| `--json`          | —            | off      | Print JSON output only (no pretty terminal summary).                                                       |
-| `--include-model` | —            | off      | Embed the full normalized content model in the JSON output.                                                |
-| `--out`           | `<file>`     | —        | Write the JSON result to a file in addition to printing.                                                   |
+| Flag                   | Argument     | Default  | Description                                                                                                                                            |
+| ---------------------- | ------------ | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `--token`              | `<token>`    | —        | CDA delivery token. Falls back when token sniffing fails (URL mode) or replaces it entirely (direct mode).                                             |
+| `--space-id`           | `<id>`       | —        | Skip URL detection and audit this space directly.                                                                                                      |
+| `--environment`        | `<env>`      | `master` | Contentful environment to audit.                                                                                                                       |
+| `--region`             | `global\|eu` | `global` | Contentful region.                                                                                                                                     |
+| `--no-ai`              | —            | AI on    | Skip AI narration. Use this when `OPENAI_API_KEY` is not set or narration is not needed.                                                               |
+| `--json`               | —            | off      | Print JSON output only (no pretty terminal summary).                                                                                                   |
+| `--include-model`      | —            | off      | Embed the full normalized content model in the JSON output.                                                                                            |
+| `--include-raw-schema` | —            | off      | Embed the raw, un-normalized CMS schema (content types + locales, exactly as fetched) in the JSON under `rawSchema`. Independent of `--include-model`. |
+| `--debug`              | —            | off      | Print detection diagnostics (space ID, token, and the source each was resolved from) to **stderr**. See [Debugging detection](#debugging-detection).   |
+| `--out`                | `<file>`     | —        | Write the JSON result to a file in addition to printing.                                                                                               |
 
 ---
 
@@ -102,6 +104,63 @@ cms-validate --space-id <id> --token <cda-token> --no-ai
 ```
 
 If the AI model call fails (network error, quota exceeded, etc.), narration degrades gracefully and the deterministic score is still returned.
+
+---
+
+## Debugging detection
+
+The `--debug` flag traces how the tool resolved the Contentful **space ID** and **delivery token** — which value it used and where that value came from. This is mainly useful in **URL mode**, where both are sniffed from a live page and it isn't obvious why detection succeeded or failed.
+
+All diagnostics are written to **stderr**, so they never contaminate stdout. You can safely combine `--debug` with `--json` (or `--out`) — the machine-readable result stays clean on stdout while diagnostics stream to stderr.
+
+```bash
+cms-validate https://example.com --debug
+```
+
+### What it prints
+
+Each resolved field is logged in a canonical one-line format:
+
+```
+[contentful] detect field=spaceId value=cfexampleapi source=api-host
+[contentful] detect field=token value=b4c0n73n7fu1 source=bearer-header
+```
+
+In URL mode, the tool collects multiple candidate tokens from the page and probes each against the Contentful Delivery API until one validates. With `--debug` you also see each probe result, and a note if the candidate list was truncated:
+
+```
+[contentful] token candidates truncated: 31 found, trying first 25
+[contentful] token probe source=query-param result=invalid
+[contentful] token probe source=bearer-header result=valid
+[contentful] detect field=token value=b4c0n73n7fu1 source=bearer-header
+```
+
+When nothing valid is found, the field is logged with `value=<none>` and `source=not-found`:
+
+```
+[contentful] detect field=token value=<none> source=not-found
+```
+
+### Detection sources
+
+The `source` field reports where each value was resolved from:
+
+| Source            | Meaning                                                       |
+| ----------------- | ------------------------------------------------------------- |
+| `provided-flag`   | Supplied explicitly via `--space-id` / `--token`.             |
+| `asset-host`      | Parsed from a Contentful asset host (`*.ctfassets.net`).      |
+| `api-host`        | Parsed from a Contentful API host (`*.contentful.com`).       |
+| `query-param`     | Found in a request URL query parameter (e.g. `access_token`). |
+| `bearer-header`   | Extracted from an `Authorization: Bearer` request header.     |
+| `post-body`       | Found in an outgoing request (POST) body.                     |
+| `response-body`   | Found in a network response body.                             |
+| `local-storage`   | Read from the page's `localStorage`.                          |
+| `session-storage` | Read from the page's `sessionStorage`.                        |
+| `cookie`          | Read from a page cookie.                                      |
+| `page-body`       | Matched in the raw HTML/JS of the page body.                  |
+| `not-found`       | No value could be resolved from any source.                   |
+
+If detection fails (`source=not-found`), pass the value explicitly with `--space-id` and/or `--token`, or fall back to [Direct mode](#mode-1--direct-space-id--token).
 
 ---
 

@@ -41,6 +41,16 @@ export interface Access {
   acquisition: "sniffed" | "provided";
 }
 
+export interface RawSchema {
+  contentTypes: unknown[];
+  locales: unknown[];
+}
+
+export interface FetchedModel {
+  model: NormalizedModel;
+  rawSchema: RawSchema;
+}
+
 export interface AcquireOpts {
   page: FetchedPage;
   providedToken?: string;
@@ -54,6 +64,6 @@ export interface CmsAdapter {
   readonly id: CmsId;
   detect(page: FetchedPage): DetectResult;
   acquireAccess(detect: DetectResult, opts: AcquireOpts): Promise<Access>;
-  fetchModel(access: Access): Promise<NormalizedModel>;
+  fetchModel(access: Access): Promise<FetchedModel>;
   capabilities(): CapabilityManifest;
 }

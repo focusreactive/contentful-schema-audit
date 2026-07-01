@@ -13,6 +13,7 @@ export interface RunArgs {
   region?: "global" | "eu";
   ai: boolean;
   includeModel: boolean;
+  includeRawSchema: boolean;
   debug?: boolean;
 }
 
@@ -60,9 +61,10 @@ export async function run(args: RunArgs, deps: RunDeps): Promise<ValidationResul
     debug: args.debug,
   });
 
-  const fetchedModel = await deps.adapter.fetchModel(access);
-  const semantic = args.ai ? await deps.analyzer.analyze(fetchedModel) : undefined;
-  const { overall, dimensions } = scoreModel(fetchedModel, deps.adapter.capabilities(), semantic);
+  const fetched = await deps.adapter.fetchModel(access);
+  const model = fetched.model;
+  const semantic = args.ai ? await deps.analyzer.analyze(model) : undefined;
+  const { overall, dimensions } = scoreModel(model, deps.adapter.capabilities(), semantic);
   const narration = args.ai ? await deps.narrator.narrate(toNarrationInput(overall, dimensions)) : undefined;
 
   return {
@@ -76,7 +78,8 @@ export async function run(args: RunArgs, deps: RunDeps): Promise<ValidationResul
     overall,
     dimensions,
     narration,
-    model: args.includeModel ? fetchedModel : undefined,
+    model: args.includeModel ? model : undefined,
+    rawSchema: args.includeRawSchema ? fetched.rawSchema : undefined,
     generatedAt: deps.now(),
   };
 }

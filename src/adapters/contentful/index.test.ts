@@ -1,5 +1,5 @@
 import { contentfulAdapter, AccessError } from "./index.js";
-import type { DetectResult, FetchedPage } from "../../core/adapter.js";
+import type { Access, DetectResult, FetchedPage } from "../../core/adapter.js";
 
 function page(partial: Partial<FetchedPage>): FetchedPage {
   return {
@@ -139,5 +139,34 @@ describe("contentfulAdapter.acquireAccess debug logging", () => {
     );
     expect(spy).not.toHaveBeenCalled();
     spy.mockRestore();
+  });
+});
+
+describe("contentfulAdapter.fetchModel", () => {
+  const access: Access = {
+    spaceId: "sp", environment: "master", deliveryToken: "t", region: "global", acquisition: "provided",
+  };
+
+  it("returns the normalized model and echoes the raw content types + locales", async () => {
+    const contentTypes = {
+      items: [{ sys: { id: "page", revision: 7 }, name: "Page", fields: [{ id: "title", name: "Title", type: "Symbol" }] }],
+    };
+    const locales = { items: [{ code: "en-US", default: true, fallbackCode: null }] };
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async (url: string) =>
+        new Response(JSON.stringify(url.includes("content_types") ? contentTypes : locales), {
+          status: 200,
+          headers: { "content-type": "application/json" },
+        }),
+      ),
+    );
+
+    const fetched = await contentfulAdapter.fetchModel(access);
+
+    expect(fetched.model.contentTypes[0]?.id).toBe("page");
+    expect(fetched.rawSchema.contentTypes).toHaveLength(1);
+    expect((fetched.rawSchema.contentTypes[0] as { sys: { revision: number } }).sys.revision).toBe(7);
+    expect((fetched.rawSchema.locales[0] as { code: string }).code).toBe("en-US");
   });
 });

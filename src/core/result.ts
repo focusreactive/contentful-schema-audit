@@ -1,4 +1,5 @@
 import type { CmsId, NormalizedModel } from "./model/index.js";
+import type { RawSchema } from "./adapter.js";
 import type { Band, CheckResult } from "./checks/index.js";
 import type { DimensionId } from "./signals/index.js";
 import type { Tier } from "./dimensions/types.js";
@@ -40,5 +41,6 @@ export interface ValidationResult {
   dimensions: DimensionResult[];
   narration?: Narration;
   model?: NormalizedModel;
+  rawSchema?: RawSchema;
   generatedAt: string;
 }

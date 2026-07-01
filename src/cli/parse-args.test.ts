@@ -25,4 +25,9 @@ describe("parseArgs", () => {
     expect(parseArgs(["node", "cli", "https://site.com"]).debug).toBe(false);
     expect(parseArgs(["node", "cli", "https://site.com", "--debug"]).debug).toBe(true);
   });
+
+  it("defaults includeRawSchema to false and enables it with --include-raw-schema", () => {
+    expect(parseArgs(["node", "cli", "https://site.com"]).includeRawSchema).toBe(false);
+    expect(parseArgs(["node", "cli", "https://site.com", "--include-raw-schema"]).includeRawSchema).toBe(true);
+  });
 });

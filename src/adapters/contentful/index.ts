@@ -1,6 +1,5 @@
-import type { CmsAdapter, Access, AcquireOpts, DetectResult, FetchedPage } from "../../core/adapter.js";
+import type { CmsAdapter, Access, AcquireOpts, DetectResult, FetchedPage, FetchedModel } from "../../core/adapter.js";
 import type { CapabilityManifest, Signal } from "../../core/signals/index.js";
-import type { NormalizedModel } from "../../core/model/index.js";
 import { detectContentful } from "./detect.js";
 import { collectTokenCandidates, MAX_CANDIDATES } from "./sniff-token.js";
 import { logDetection } from "./log.js";
@@ -109,16 +108,24 @@ export const contentfulAdapter: CmsAdapter = {
     );
   },
 
-  async fetchModel(access: Access): Promise<NormalizedModel> {
+  async fetchModel(access: Access): Promise<FetchedModel> {
     const [contentTypes, locales] = await Promise.all([fetchContentTypes(access), fetchLocales(access)]);
 
-    return normalize({
+    const model = normalize({
       contentTypes,
       locales,
       spaceId: access.spaceId,
       environment: access.environment,
       fetchedAt: nowIso(),
     });
+
+    return {
+      model,
+      rawSchema: {
+        contentTypes,
+        locales,
+      },
+    };
   },
 
   capabilities(): CapabilityManifest {

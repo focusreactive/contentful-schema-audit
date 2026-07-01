@@ -10,7 +10,7 @@ describe("toSemanticAnalysis", () => {
         ],
         fieldRoles: [{ typeId: "page", fieldId: "slug", role: "slug", confidence: 0.8 }],
         judgments: [
-          { kind: "orphanIsDebt", checkId: "refs.noOrphans", subject: "blog", verdict: "refuted", confidence: 0.7, rationale: "ok" },
+          { kind: "orphanIsDebt", subject: "blog", verdict: "refuted", confidence: 0.7, rationale: "ok" },
         ],
       },
       "gpt-test",
@@ -23,5 +23,28 @@ describe("toSemanticAnalysis", () => {
     expect(result.roleMap.fields["page.slug"]).toEqual([{ role: "slug", confidence: 0.8 }]);
     expect(result.judgments).toHaveLength(1);
     expect(result.model).toBe("gpt-test");
+  });
+
+  it("derives the consumer checkId from each judgment kind", () => {
+    const result = toSemanticAnalysis(
+      {
+        typeRoles: [],
+        fieldRoles: [],
+        judgments: [
+          { kind: "orphanIsDebt", subject: "blog", verdict: "confirmed", confidence: 0.9, rationale: "a" },
+          { kind: "godTypeIsProblem", subject: "page", verdict: "confirmed", confidence: 0.9, rationale: "b" },
+          { kind: "namingIsCryptic", subject: "_dimension", verdict: "refuted", confidence: 0.9, rationale: "c" },
+          { kind: "redirectsAreMissing", subject: "_dimension", verdict: "uncertain", confidence: 0.5, rationale: "d" },
+        ],
+      },
+      "gpt-test",
+    );
+
+    expect(result.judgments.map((j) => [j.kind, j.checkId])).toEqual([
+      ["orphanIsDebt", "refs.noOrphans"],
+      ["godTypeIsProblem", "modeling.godTypes"],
+      ["namingIsCryptic", "schemaDebt.namingMeaningful"],
+      ["redirectsAreMissing", "globalConfig.redirects"],
+    ]);
   });
 });

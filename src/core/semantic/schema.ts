@@ -9,7 +9,6 @@ export const semanticOutputSchema = z.object({
   judgments: z.array(
     z.object({
       kind: z.enum(JUDGMENT_KINDS),
-      checkId: z.string(),
       subject: z.string(),
       verdict: z.enum(VERDICTS),
       confidence,

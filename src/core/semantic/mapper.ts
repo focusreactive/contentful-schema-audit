@@ -1,6 +1,13 @@
 import type { SemanticOutput } from "./schema.js";
-import type { RoleMap, SemanticAnalysis } from "./types.js";
+import type { JudgmentKind, RoleMap, SemanticAnalysis } from "./types.js";
 import { fieldKey } from "./roles.js";
+
+const CHECK_ID_BY_KIND: Record<JudgmentKind, string> = {
+  orphanIsDebt: "refs.noOrphans",
+  godTypeIsProblem: "modeling.godTypes",
+  namingIsCryptic: "schemaDebt.namingMeaningful",
+  redirectsAreMissing: "globalConfig.redirects",
+};
 
 export function toSemanticAnalysis(raw: SemanticOutput, modelName: string): SemanticAnalysis {
   const roleMap: RoleMap = { types: {}, fields: {} };
@@ -14,7 +21,7 @@ export function toSemanticAnalysis(raw: SemanticOutput, modelName: string): Sema
 
   return {
     roleMap,
-    judgments: raw.judgments,
+    judgments: raw.judgments.map((j) => ({ ...j, checkId: CHECK_ID_BY_KIND[j.kind] })),
     model: modelName,
   };
 }

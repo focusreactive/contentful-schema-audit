@@ -36,7 +36,3 @@ export interface NarrationInput {
   overall: OverallGrade;
   dimensions: NarrationDimension[];
 }
-
-export interface Narrator {
-  narrate(input: NarrationInput): Promise<Narration | undefined>;
-}

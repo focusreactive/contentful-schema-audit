@@ -2,7 +2,7 @@ import { writeFile } from "node:fs/promises";
 import type { ValidationResult } from "../core/result.js";
 import type { OutputFlags } from "./parse-args.js";
 import { renderPretty } from "./pretty.js";
-import { renderReport } from "./report.js";
+import { renderReport } from "./report/index.js";
 
 export async function emitResult(
   result: ValidationResult,

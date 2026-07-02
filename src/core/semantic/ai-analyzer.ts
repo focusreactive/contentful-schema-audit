@@ -23,7 +23,7 @@ export function createAiSemanticAnalyzer(opts: { model?: string } = {}): Semanti
           system,
           prompt,
         });
-        return toSemanticAnalysis(object, modelName);
+        return toSemanticAnalysis(semanticOutputSchema.parse(object), modelName);
       } catch (err) {
         const message = err instanceof Error ? err.message : String(err);
         console.warn(`Semantic analysis unavailable, scoring without it: ${message}`);

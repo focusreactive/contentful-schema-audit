@@ -24,11 +24,12 @@ export function createAiNarrator(opts: { model?: string } = {}): Narrator {
           system,
           prompt,
         });
+        const parsed = narrationSchema.parse(object);
 
         return {
-          overall: object.overall,
-          dimensions: Object.fromEntries(object.dimensions.map((d) => [d.id, d.narration])) as Narration["dimensions"],
-          findings: Object.fromEntries(object.findings.map((f) => [f.id, { impact: f.impact, fix: f.fix }])),
+          overall: parsed.overall,
+          dimensions: Object.fromEntries(parsed.dimensions.map((d) => [d.id, d.narration])) as Narration["dimensions"],
+          findings: Object.fromEntries(parsed.findings.map((f) => [f.id, { impact: f.impact, fix: f.fix }])),
         };
       } catch (err) {
         const message = err instanceof Error ? err.message : String(err);

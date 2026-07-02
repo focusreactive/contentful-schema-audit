@@ -24,3 +24,13 @@ describe("renderPretty", () => {
     expect(out).toContain("not applicable");
   });
 });
+
+describe("renderPretty aiHint", () => {
+  it("appends the Claude Code hint when asked", () => {
+    expect(renderPretty(result, { aiHint: true })).toContain("run /validate-cms inside Claude Code");
+  });
+
+  it("omits the hint by default", () => {
+    expect(renderPretty(result)).not.toContain("/validate-cms");
+  });
+});

@@ -1,5 +1,3 @@
-import type { NormalizedModel } from "../model/index.js";
-
 export const TYPE_ROLES = ["page", "settings", "nav", "redirect"] as const;
 export type TypeRole = (typeof TYPE_ROLES)[number];
 
@@ -45,8 +43,4 @@ export interface SemanticAnalysis {
   roleMap: RoleMap;
   judgments: Judgment[];
   model: string;
-}
-
-export interface SemanticAnalyzer {
-  analyze(model: NormalizedModel): Promise<SemanticAnalysis | undefined>;
 }

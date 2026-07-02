@@ -1,0 +1,713 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`pipeline e2e (recorded cfexampleapi fixtures) > digest → semantic → score → narration → finalize produces a complete result 1`] = `
+{
+  "dimensions": [
+    {
+      "band": "poor",
+      "checks": [
+        {
+          "evidence": {
+            "affectedTypes": [
+              "cat",
+            ],
+            "summary": "0 of 1 page-like types declare a meta-title field",
+          },
+          "fixHint": "Add a metaTitle field to each page-like type.",
+          "id": "seo.title",
+          "severity": "major",
+          "status": "fail",
+          "title": "Meta title field present",
+        },
+        {
+          "evidence": {
+            "affectedTypes": [
+              "cat",
+            ],
+            "summary": "0 of 1 page-like types declare a meta-description field",
+          },
+          "fixHint": "Add a metaDescription field to each page-like type.",
+          "id": "seo.description",
+          "severity": "major",
+          "status": "fail",
+          "title": "Meta description field present",
+        },
+        {
+          "evidence": {
+            "affectedTypes": [
+              "cat",
+            ],
+            "summary": "0 of 1 page-like types declare a canonical field",
+          },
+          "fixHint": "Add a canonicalUrl field to each page-like type to prevent duplicate-content penalties.",
+          "id": "seo.canonical",
+          "severity": "critical",
+          "status": "fail",
+          "title": "Canonical URL field present",
+        },
+        {
+          "evidence": {
+            "affectedTypes": [
+              "cat",
+            ],
+            "summary": "0 of 1 page-like types declare a social-image field",
+          },
+          "fixHint": "Add an ogImage field so shared links render a preview image.",
+          "id": "seo.ogImage",
+          "severity": "minor",
+          "status": "fail",
+          "title": "Social/OG image field present",
+        },
+        {
+          "evidence": {
+            "affectedTypes": [
+              "cat",
+            ],
+            "summary": "0 of 1 page-like types expose a robots/noindex control",
+          },
+          "fixHint": "Add a noindex/robots toggle so editors can control indexing.",
+          "id": "seo.noindex",
+          "severity": "minor",
+          "status": "fail",
+          "title": "Robots/noindex control present",
+        },
+      ],
+      "id": "seo",
+      "score": 0,
+      "state": "scored",
+      "tier": "high",
+      "title": "SEO Readiness",
+      "weight": 1.5,
+    },
+    {
+      "band": "good",
+      "checks": [
+        {
+          "evidence": {
+            "summary": "0 of 0 body-like fields use rich text",
+          },
+          "fixHint": "Use a RichText field for body/content rather than long plain text.",
+          "id": "modeling.richText",
+          "severity": "major",
+          "status": "pass",
+          "title": "Body fields use rich text",
+        },
+        {
+          "evidence": {
+            "summary": "No oversized content types, or large types are justified",
+          },
+          "fixHint": "Split content types with more than 30 fields into composable parts.",
+          "id": "modeling.godTypes",
+          "severity": "minor",
+          "status": "pass",
+          "title": "No oversized content types",
+        },
+        {
+          "evidence": {
+            "summary": "At least one type is reused across multiple types",
+          },
+          "fixHint": "Extract shared structures (e.g. a Link or Media block) reused by multiple types.",
+          "id": "modeling.reuse",
+          "severity": "minor",
+          "status": "pass",
+          "title": "Reusable building blocks exist",
+        },
+        {
+          "evidence": {
+            "detail": {
+              "fields": [],
+            },
+            "summary": "0 of 3 fields are untyped JSON (bypass validation and localisation)",
+          },
+          "fixHint": "Replace JSON fields with typed structured fields so validation, localisation, and linking can be applied.",
+          "id": "modeling.jsonFields",
+          "severity": "minor",
+          "status": "pass",
+          "title": "Few escape-hatch JSON fields",
+        },
+      ],
+      "id": "modeling",
+      "score": 100,
+      "state": "scored",
+      "tier": "high",
+      "title": "Content Modeling Quality",
+      "weight": 1.5,
+    },
+    {
+      "band": "good",
+      "checks": [
+        {
+          "evidence": {
+            "detail": {
+              "fields": [],
+            },
+            "summary": "0 fields store internal links as plain strings",
+          },
+          "fixHint": "Replace free-text link fields with Link/Entry references so links can't dangle.",
+          "id": "refs.notStringly",
+          "severity": "critical",
+          "status": "pass",
+          "title": "Internal links use references, not strings",
+        },
+        {
+          "evidence": {
+            "summary": "1 of 1 entry-link fields restrict allowed target types",
+          },
+          "fixHint": "Add a linkContentType validation so each reference only accepts the intended types.",
+          "id": "refs.linkContentType",
+          "severity": "major",
+          "status": "pass",
+          "title": "Entry links restrict their target types",
+        },
+        {
+          "evidence": {
+            "summary": "No orphaned content types, or all are deliberate entry points",
+          },
+          "fixHint": "Connect or remove content types that are not part of the reference graph.",
+          "id": "refs.noOrphans",
+          "severity": "minor",
+          "status": "pass",
+          "title": "No orphaned content types",
+        },
+      ],
+      "id": "referentialIntegrity",
+      "score": 100,
+      "state": "scored",
+      "tier": "high",
+      "title": "Referential Integrity",
+      "weight": 1.5,
+    },
+    {
+      "band": "good",
+      "checks": [
+        {
+          "evidence": {
+            "summary": "2 of 3 fields carry at least one validation",
+          },
+          "fixHint": "Add validations (size, regexp, range, allowed values) to constrain editor input.",
+          "id": "validation.coverage",
+          "severity": "major",
+          "status": "pass",
+          "title": "Fields carry validations",
+        },
+        {
+          "evidence": {
+            "detail": {
+              "fields": [],
+            },
+            "summary": "0 of 0 slug/identifier fields lack a unique constraint",
+          },
+          "fixHint": "Add a unique validation to slug and identifier fields.",
+          "id": "validation.identifierUnique",
+          "severity": "major",
+          "status": "pass",
+          "title": "Identifier fields are unique",
+        },
+        {
+          "evidence": {
+            "affectedTypes": [
+              "cat",
+            ],
+            "summary": "1 content types have no required field",
+          },
+          "fixHint": "Mark each type's essential fields as required.",
+          "id": "validation.requiredDiscipline",
+          "severity": "minor",
+          "status": "fail",
+          "title": "Types declare required fields",
+        },
+      ],
+      "id": "validation",
+      "score": 80,
+      "state": "scored",
+      "tier": "medium",
+      "title": "Validation Discipline",
+      "weight": 1,
+    },
+    {
+      "band": "poor",
+      "checks": [
+        {
+          "evidence": {
+            "affectedTypes": [
+              "cat",
+            ],
+            "summary": "0 of 1 page-like types declare a slug field",
+          },
+          "fixHint": "Add a slug field to every routable content type.",
+          "id": "slug.present",
+          "severity": "critical",
+          "status": "fail",
+          "title": "Page types have a slug field",
+        },
+        {
+          "evidence": {
+            "affectedTypes": [
+              "cat",
+            ],
+            "summary": "0 of 1 page-like types have a unique slug",
+          },
+          "fixHint": "Add a unique validation to slug fields to prevent colliding URLs.",
+          "id": "slug.unique",
+          "severity": "major",
+          "status": "fail",
+          "title": "Slug fields are unique",
+        },
+        {
+          "evidence": {
+            "affectedTypes": [
+              "cat",
+            ],
+            "summary": "0 of 1 page-like types pattern-validate their slug",
+          },
+          "fixHint": "Add a regexp validation so slugs stay URL-safe.",
+          "id": "slug.pattern",
+          "severity": "minor",
+          "status": "fail",
+          "title": "Slug fields are pattern-validated",
+        },
+      ],
+      "id": "slug",
+      "score": 0,
+      "state": "scored",
+      "tier": "medium",
+      "title": "Slug & Routing Hygiene",
+      "weight": 1,
+    },
+    {
+      "checks": [],
+      "id": "assets",
+      "reason": "No asset/media fields in the model.",
+      "state": "not_applicable",
+      "tier": "medium",
+      "title": "Asset Management",
+      "weight": 1,
+    },
+    {
+      "band": "good",
+      "checks": [
+        {
+          "evidence": {
+            "detail": {
+              "locales": [],
+            },
+            "summary": "0 of 1 non-default locales have no fallback",
+          },
+          "fixHint": "Set a fallbackCode on every non-default locale so missing translations degrade gracefully.",
+          "id": "i18n.fallbackChain",
+          "severity": "major",
+          "status": "pass",
+          "title": "Locales have fallback chains",
+        },
+        {
+          "evidence": {
+            "summary": "1 fields are marked localized",
+          },
+          "fixHint": "Mark translatable fields as localized rather than configuring locales without using them.",
+          "id": "i18n.localizedFields",
+          "severity": "minor",
+          "status": "pass",
+          "title": "Localization is actually used",
+        },
+      ],
+      "id": "i18n",
+      "score": 100,
+      "state": "scored",
+      "tier": "situational",
+      "title": "Internationalization",
+      "weight": 0.5,
+    },
+    {
+      "band": "poor",
+      "checks": [
+        {
+          "evidence": {
+            "summary": "No multi-type entry arrays found",
+          },
+          "fixHint": "Model flexible layouts as arrays of multiple block types (a page-builder pattern). Note: editor UX (widgets, sidebar) is not assessable from public data.",
+          "id": "composable.modularArrays",
+          "severity": "minor",
+          "status": "fail",
+          "title": "Modular content arrays exist",
+        },
+      ],
+      "id": "composable",
+      "score": 0,
+      "state": "scored",
+      "tier": "situational",
+      "title": "Composable Content",
+      "weight": 0.5,
+    },
+    {
+      "band": "poor",
+      "checks": [
+        {
+          "evidence": {
+            "summary": "No centralized settings/config type found",
+          },
+          "fixHint": "Add a singleton settings type for global config instead of hardcoding values.",
+          "id": "globalConfig.settingsType",
+          "severity": "minor",
+          "status": "fail",
+          "title": "Centralized settings type exists",
+        },
+        {
+          "evidence": {
+            "summary": "No navigation/menu type found",
+          },
+          "fixHint": "Model navigation as content so editors can manage menus without code changes.",
+          "id": "globalConfig.navModeled",
+          "severity": "minor",
+          "status": "fail",
+          "title": "Navigation is modeled as content",
+        },
+        {
+          "evidence": {
+            "summary": "Could not determine whether missing redirects are a real gap",
+          },
+          "fixHint": "Model redirects as entries so editors can manage them in the CMS.",
+          "id": "globalConfig.redirects",
+          "severity": "minor",
+          "status": "not_assessable",
+          "title": "Redirects are modeled as entries",
+        },
+      ],
+      "id": "globalConfig",
+      "score": 0,
+      "state": "scored",
+      "tier": "situational",
+      "title": "Global Configuration",
+      "weight": 0.5,
+    },
+    {
+      "band": "good",
+      "checks": [
+        {
+          "evidence": {
+            "summary": "0 of 3 fields are hidden from editors",
+          },
+          "fixHint": "Remove hidden fields once migrations are complete rather than leaving dead schema visible only via the API.",
+          "id": "schemaDebt.hiddenFields",
+          "severity": "major",
+          "status": "pass",
+          "title": "Few hidden/read-only fields",
+        },
+        {
+          "evidence": {
+            "summary": "100% of field ids follow a single casing convention",
+          },
+          "fixHint": "Adopt one casing convention (camelCase) across all field ids.",
+          "id": "schemaDebt.namingConsistency",
+          "severity": "minor",
+          "status": "pass",
+          "title": "Consistent field naming",
+        },
+        {
+          "evidence": {
+            "summary": "Field/type names are meaningful",
+          },
+          "fixHint": "Rename cryptic fields to describe their content.",
+          "id": "schemaDebt.namingMeaningful",
+          "severity": "minor",
+          "status": "pass",
+          "title": "Field names are meaningful",
+        },
+        {
+          "evidence": {
+            "affectedTypes": [
+              "cat",
+            ],
+            "summary": "1 of 1 content types lack a description",
+          },
+          "fixHint": "Add a description to each content type so editors know when and how to use it.",
+          "id": "schemaDebt.noDescription",
+          "severity": "minor",
+          "status": "fail",
+          "title": "Content types have descriptions",
+        },
+      ],
+      "id": "schemaDebt",
+      "score": 80,
+      "state": "scored",
+      "tier": "situational",
+      "title": "Schema Debt",
+      "weight": 0.5,
+    },
+  ],
+  "generatedAt": "2026-07-02T00:00:00.000Z",
+  "model": {
+    "cms": "contentful",
+    "contentTypes": [
+      {
+        "createdAt": "2013-06-27T22:46:12.852Z",
+        "displayField": "name",
+        "fields": [
+          {
+            "editorState": {
+              "hidden": false,
+              "readOnly": false,
+            },
+            "id": "name",
+            "localized": true,
+            "name": "Name",
+            "required": false,
+            "type": "text",
+            "validations": [
+              {
+                "kind": "size",
+                "params": {
+                  "size": {
+                    "max": 80,
+                    "min": 1,
+                  },
+                },
+              },
+            ],
+          },
+          {
+            "allowedLinkTypes": [
+              "cat",
+            ],
+            "editorState": {
+              "hidden": false,
+              "readOnly": false,
+            },
+            "id": "bestFriend",
+            "linkTarget": "entry",
+            "localized": false,
+            "name": "Best Friend",
+            "required": false,
+            "type": "link",
+            "validations": [
+              {
+                "kind": "linkContentType",
+                "params": {
+                  "linkContentType": [
+                    "cat",
+                  ],
+                },
+              },
+            ],
+          },
+          {
+            "editorState": {
+              "hidden": false,
+              "readOnly": false,
+            },
+            "id": "likes",
+            "items": {
+              "type": "text",
+              "validations": [],
+            },
+            "localized": false,
+            "name": "Likes",
+            "required": false,
+            "type": "array",
+            "validations": [],
+          },
+        ],
+        "id": "cat",
+        "name": "Cat",
+        "updatedAt": "2013-09-02T13:14:47.863Z",
+      },
+    ],
+    "environment": "master",
+    "locales": [
+      {
+        "code": "en-US",
+        "default": true,
+        "fallbackCode": null,
+        "name": "English",
+        "supportsFallback": true,
+      },
+      {
+        "code": "tlh",
+        "default": false,
+        "fallbackCode": "en-US",
+        "name": "Klingon",
+        "supportsFallback": true,
+      },
+    ],
+    "meta": {
+      "contentTypeCount": 1,
+      "fetchedAt": "2026-07-02T00:00:00.000Z",
+      "localeCount": 2,
+    },
+    "referenceGraph": {
+      "edges": [
+        {
+          "fromField": "bestFriend",
+          "fromType": "cat",
+          "toTypes": [
+            "cat",
+          ],
+          "viaArray": false,
+        },
+      ],
+      "typeIds": [
+        "cat",
+      ],
+    },
+    "spaceId": "cfexampleapi",
+  },
+  "narration": {
+    "dimensions": {
+      "assets": "About Asset Management.",
+      "composable": "About Composable Content.",
+      "globalConfig": "About Global Configuration.",
+      "i18n": "About Internationalization.",
+      "modeling": "About Content Modeling Quality.",
+      "referentialIntegrity": "About Referential Integrity.",
+      "schemaDebt": "About Schema Debt.",
+      "seo": "About SEO Readiness.",
+      "slug": "About Slug & Routing Hygiene.",
+      "validation": "About Validation Discipline.",
+    },
+    "findings": {
+      "composable.modularArrays": {
+        "fix": "Fix.",
+        "impact": "Impact.",
+      },
+      "globalConfig.navModeled": {
+        "fix": "Fix.",
+        "impact": "Impact.",
+      },
+      "globalConfig.settingsType": {
+        "fix": "Fix.",
+        "impact": "Impact.",
+      },
+      "schemaDebt.noDescription": {
+        "fix": "Fix.",
+        "impact": "Impact.",
+      },
+      "seo.canonical": {
+        "fix": "Fix.",
+        "impact": "Impact.",
+      },
+      "seo.description": {
+        "fix": "Fix.",
+        "impact": "Impact.",
+      },
+      "seo.noindex": {
+        "fix": "Fix.",
+        "impact": "Impact.",
+      },
+      "seo.ogImage": {
+        "fix": "Fix.",
+        "impact": "Impact.",
+      },
+      "seo.title": {
+        "fix": "Fix.",
+        "impact": "Impact.",
+      },
+      "slug.pattern": {
+        "fix": "Fix.",
+        "impact": "Impact.",
+      },
+      "slug.present": {
+        "fix": "Fix.",
+        "impact": "Impact.",
+      },
+      "slug.unique": {
+        "fix": "Fix.",
+        "impact": "Impact.",
+      },
+      "validation.requiredDiscipline": {
+        "fix": "Fix.",
+        "impact": "Impact.",
+      },
+    },
+    "overall": "End-to-end fixture narration.",
+  },
+  "overall": {
+    "band": "poor",
+    "notApplicableCount": 1,
+    "notAssessableCount": 0,
+    "score": 55,
+    "scoredCount": 9,
+  },
+  "rawSchema": {
+    "contentTypes": [
+      {
+        "displayField": "name",
+        "fields": [
+          {
+            "disabled": false,
+            "id": "name",
+            "localized": true,
+            "name": "Name",
+            "omitted": false,
+            "required": false,
+            "type": "Symbol",
+            "validations": [
+              {
+                "size": {
+                  "max": 80,
+                  "min": 1,
+                },
+              },
+            ],
+          },
+          {
+            "disabled": false,
+            "id": "bestFriend",
+            "linkType": "Entry",
+            "localized": false,
+            "name": "Best Friend",
+            "omitted": false,
+            "required": false,
+            "type": "Link",
+            "validations": [
+              {
+                "linkContentType": [
+                  "cat",
+                ],
+              },
+            ],
+          },
+          {
+            "disabled": false,
+            "id": "likes",
+            "items": {
+              "type": "Symbol",
+              "validations": [],
+            },
+            "localized": false,
+            "name": "Likes",
+            "omitted": false,
+            "required": false,
+            "type": "Array",
+          },
+        ],
+        "name": "Cat",
+        "sys": {
+          "createdAt": "2013-06-27T22:46:12.852Z",
+          "id": "cat",
+          "updatedAt": "2013-09-02T13:14:47.863Z",
+        },
+      },
+    ],
+    "locales": [
+      {
+        "code": "en-US",
+        "default": true,
+        "fallbackCode": null,
+        "name": "English",
+      },
+      {
+        "code": "tlh",
+        "default": false,
+        "fallbackCode": "en-US",
+        "name": "Klingon",
+      },
+    ],
+  },
+  "source": {
+    "acquisition": "provided",
+    "cms": "contentful",
+    "environment": "master",
+    "spaceId": "cfexampleapi",
+    "url": undefined,
+  },
+}
+`;

@@ -1,6 +1,6 @@
 # cms-schema-validator
 
-`cms-schema-validator` audits a Contentful content model across 10 deterministic health dimensions and produces a scored, tier-weighted report. It connects directly to the Contentful Delivery API — no management token needed — and emits both a pretty terminal summary and structured JSON. An optional AI narration layer (powered by OpenAI) adds a prose summary to each dimension; this never affects the numeric grade, which is always pure and deterministic.
+`cms-schema-validator` audits a Contentful content model across 10 deterministic health dimensions and produces a scored, tier-weighted report. It connects directly to the Contentful Delivery API — no management token needed — and emits both a pretty terminal summary and structured JSON. An optional AI layer — semantic role detection and prose narration — runs **in-session through Claude Code** via the `/validate-cms` skill; it never affects the numeric grade, which is always pure and deterministic.
 
 ---
 
@@ -52,10 +52,10 @@ cms-validate --space-id <id> --token <cda-token>
 **Example** — the public Contentful example space:
 
 ```bash
-cms-validate --space-id cfexampleapi --token b4c0n73n7fu1 --no-ai
+cms-validate --space-id cfexampleapi --token b4c0n73n7fu1
 ```
 
-This space scores **Overall 43 / 100 (poor)**. The SEO and Slug dimensions are reported as "not applicable" because the example space has no page-like content types.
+Without AI semantic analysis, dimensions that depend on it (e.g. SEO and Slug) are reported as "not assessable"; run the audit through Claude Code (see [AI analysis via Claude Code](#ai-analysis-via-claude-code)) to have them scored.
 
 ### Mode 2 — URL (auto-detect)
 
@@ -79,31 +79,47 @@ cms-validate https://example.com --token <cda-token>
 | `--space-id`           | `<id>`       | —        | Skip URL detection and audit this space directly.                                                                                                      |
 | `--environment`        | `<env>`      | `master` | Contentful environment to audit.                                                                                                                       |
 | `--region`             | `global\|eu` | `global` | Contentful region.                                                                                                                                     |
-| `--no-ai`              | —            | AI on    | Skip AI narration. Use this when `OPENAI_API_KEY` is not set or narration is not needed.                                                               |
 | `--json`               | —            | off      | Print JSON output only (no pretty terminal summary).                                                                                                   |
 | `--include-model`      | —            | off      | Embed the full normalized content model in the JSON output.                                                                                            |
 | `--include-raw-schema` | —            | off      | Embed the raw, un-normalized CMS schema (content types + locales, exactly as fetched) in the JSON under `rawSchema`. Independent of `--include-model`. |
 | `--debug`              | —            | off      | Print detection diagnostics (space ID, token, and the source each was resolved from) to **stderr**. See [Debugging detection](#debugging-detection).   |
 | `--out`                | `<file>`     | —        | Write the JSON result to a file in addition to printing.                                                                                               |
+| `--report`             | `<file>`     | —        | Write a Markdown report to a file.                                                                                                                     |
+
+### Pipeline subcommands
+
+The AI-assisted audit runs as a three-phase pipeline driven from a Claude Code session (see [AI analysis via Claude Code](#ai-analysis-via-claude-code)):
+
+| Subcommand | Flags                                                     | What it does                                                                                         |
+| ---------- | --------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
+| `digest`   | `[url]` + acquisition flags, `--work-dir <dir>`           | Fetches and normalizes the model, persists pipeline state, prints the semantic-classification brief. |
+| `score`    | `--work-dir <dir>`, `--no-semantic`                       | Validates `semantic.json`, scores the model, prints the narration brief.                             |
+| `finalize` | `--work-dir <dir>`, `--no-narration` + presentation flags | Validates `narration.json` and emits the final report (identical shape to the bare command).         |
+
+**Exit codes:** `0` success · `1` operational error (network, arguments, missing/stale state) · `2` AI-input validation failure (`semantic.json`/`narration.json` rejected — the errors on stderr say exactly what to fix).
 
 ---
 
-## AI narration
+## AI analysis via Claude Code
 
-When `OPENAI_API_KEY` is set in the environment, the tool adds a prose explanation to each scored dimension. Narration is advisory only — it never changes the numeric score or grade.
+AI semantic analysis (role detection that unlocks additional checks) and prose narration run **inside a Claude Code session** — there is no API key and the standalone CLI never calls a model. Open this repo in Claude Code and run:
 
-```bash
-export OPENAI_API_KEY=sk-...
-cms-validate --space-id <id> --token <cda-token>
+```
+/validate-cms https://example.com
+/validate-cms --space-id <id> --token <cda-token> --report out.md
 ```
 
-To disable narration explicitly:
+Under the hood the skill drives the three-phase pipeline:
 
-```bash
-cms-validate --space-id <id> --token <cda-token> --no-ai
+```
+cms-validate digest …      # fetch + normalize, prints an AI brief
+cms-validate score …       # validates semantic.json, scores, prints the narration brief
+cms-validate finalize …    # validates narration.json, emits the final report
 ```
 
-If the AI model call fails (network error, quota exceeded, etc.), narration degrades gracefully and the deterministic score is still returned.
+The session performs the classification/narration between phases; the CLI strictly validates every AI-written file (exit code 2 with actionable errors) and falls back gracefully (`--no-semantic` / `--no-narration`) so a run never dies from bad AI output. See [`.claude/skills/validate-cms/SKILL.md`](.claude/skills/validate-cms/SKILL.md) for the full workflow.
+
+Outside Claude Code, `cms-validate` runs the deterministic audit only; dimensions that require semantic analysis are reported as not assessable.
 
 ---
 

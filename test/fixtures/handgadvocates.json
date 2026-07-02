@@ -1,0 +1,4074 @@
+{
+  "source": {
+    "url": "https://handgadvocates.com",
+    "cms": "contentful",
+    "spaceId": "j3e6q038l6io",
+    "environment": "master",
+    "acquisition": "sniffed"
+  },
+  "overall": {
+    "score": 42,
+    "band": "poor",
+    "scoredCount": 9,
+    "notAssessableCount": 0,
+    "notApplicableCount": 1
+  },
+  "dimensions": [
+    {
+      "id": "seo",
+      "title": "SEO Readiness",
+      "tier": "high",
+      "weight": 1.5,
+      "checks": [
+        {
+          "id": "seo.title",
+          "title": "Meta title field present",
+          "severity": "major",
+          "status": "fail",
+          "evidence": {
+            "summary": "0 of 7 page-like types declare a meta-title field",
+            "affectedTypes": [
+              "teamMember",
+              "aboutUs",
+              "blogPost",
+              "service",
+              "career",
+              "industry",
+              "homePage"
+            ]
+          },
+          "fixHint": "Add a metaTitle field to each page-like type."
+        },
+        {
+          "id": "seo.description",
+          "title": "Meta description field present",
+          "severity": "major",
+          "status": "fail",
+          "evidence": {
+            "summary": "0 of 7 page-like types declare a meta-description field",
+            "affectedTypes": [
+              "teamMember",
+              "aboutUs",
+              "blogPost",
+              "service",
+              "career",
+              "industry",
+              "homePage"
+            ]
+          },
+          "fixHint": "Add a metaDescription field to each page-like type."
+        },
+        {
+          "id": "seo.canonical",
+          "title": "Canonical URL field present",
+          "severity": "critical",
+          "status": "fail",
+          "evidence": {
+            "summary": "0 of 7 page-like types declare a canonical field",
+            "affectedTypes": [
+              "teamMember",
+              "aboutUs",
+              "blogPost",
+              "service",
+              "career",
+              "industry",
+              "homePage"
+            ]
+          },
+          "fixHint": "Add a canonicalUrl field to each page-like type to prevent duplicate-content penalties."
+        },
+        {
+          "id": "seo.ogImage",
+          "title": "Social/OG image field present",
+          "severity": "minor",
+          "status": "fail",
+          "evidence": {
+            "summary": "0 of 7 page-like types declare a social-image field",
+            "affectedTypes": [
+              "teamMember",
+              "aboutUs",
+              "blogPost",
+              "service",
+              "career",
+              "industry",
+              "homePage"
+            ]
+          },
+          "fixHint": "Add an ogImage field so shared links render a preview image."
+        },
+        {
+          "id": "seo.noindex",
+          "title": "Robots/noindex control present",
+          "severity": "minor",
+          "status": "fail",
+          "evidence": {
+            "summary": "0 of 7 page-like types expose a robots/noindex control",
+            "affectedTypes": [
+              "teamMember",
+              "aboutUs",
+              "blogPost",
+              "service",
+              "career",
+              "industry",
+              "homePage"
+            ]
+          },
+          "fixHint": "Add a noindex/robots toggle so editors can control indexing."
+        }
+      ],
+      "state": "scored",
+      "score": 0,
+      "band": "poor"
+    },
+    {
+      "id": "modeling",
+      "title": "Content Modeling Quality",
+      "tier": "high",
+      "weight": 1.5,
+      "checks": [
+        {
+          "id": "modeling.richText",
+          "title": "Body fields use rich text",
+          "severity": "major",
+          "status": "pass",
+          "evidence": {
+            "summary": "7 of 7 body-like fields use rich text"
+          },
+          "fixHint": "Use a RichText field for body/content rather than long plain text."
+        },
+        {
+          "id": "modeling.godTypes",
+          "title": "No oversized content types",
+          "severity": "minor",
+          "status": "pass",
+          "evidence": {
+            "summary": "No oversized content types, or large types are justified"
+          },
+          "fixHint": "Split content types with more than 30 fields into composable parts."
+        },
+        {
+          "id": "modeling.reuse",
+          "title": "Reusable building blocks exist",
+          "severity": "minor",
+          "status": "pass",
+          "evidence": {
+            "summary": "At least one type is reused across multiple types"
+          },
+          "fixHint": "Extract shared structures (e.g. a Link or Media block) reused by multiple types."
+        },
+        {
+          "id": "modeling.jsonFields",
+          "title": "Few escape-hatch JSON fields",
+          "severity": "minor",
+          "status": "pass",
+          "evidence": {
+            "summary": "0 of 108 fields are untyped JSON (bypass validation and localisation)",
+            "detail": {
+              "fields": []
+            }
+          },
+          "fixHint": "Replace JSON fields with typed structured fields so validation, localisation, and linking can be applied."
+        }
+      ],
+      "state": "scored",
+      "score": 100,
+      "band": "good"
+    },
+    {
+      "id": "referentialIntegrity",
+      "title": "Referential Integrity",
+      "tier": "high",
+      "weight": 1.5,
+      "checks": [
+        {
+          "id": "refs.notStringly",
+          "title": "Internal links use references, not strings",
+          "severity": "critical",
+          "status": "pass",
+          "evidence": {
+            "summary": "0 fields store internal links as plain strings",
+            "detail": {
+              "fields": []
+            }
+          },
+          "fixHint": "Replace free-text link fields with Link/Entry references so links can't dangle."
+        },
+        {
+          "id": "refs.linkContentType",
+          "title": "Entry links restrict their target types",
+          "severity": "major",
+          "status": "pass",
+          "evidence": {
+            "summary": "13 of 15 entry-link fields restrict allowed target types"
+          },
+          "fixHint": "Add a linkContentType validation so each reference only accepts the intended types."
+        },
+        {
+          "id": "refs.noOrphans",
+          "title": "No orphaned content types",
+          "severity": "minor",
+          "status": "pass",
+          "evidence": {
+            "summary": "No orphaned content types, or all are deliberate entry points"
+          },
+          "fixHint": "Connect or remove content types that are not part of the reference graph."
+        }
+      ],
+      "state": "scored",
+      "score": 100,
+      "band": "good"
+    },
+    {
+      "id": "validation",
+      "title": "Validation Discipline",
+      "tier": "medium",
+      "weight": 1,
+      "checks": [
+        {
+          "id": "validation.coverage",
+          "title": "Fields carry validations",
+          "severity": "major",
+          "status": "fail",
+          "evidence": {
+            "summary": "3 of 108 fields carry at least one validation"
+          },
+          "fixHint": "Add validations (size, regexp, range, allowed values) to constrain editor input."
+        },
+        {
+          "id": "validation.identifierUnique",
+          "title": "Identifier fields are unique",
+          "severity": "major",
+          "status": "fail",
+          "evidence": {
+            "summary": "5 of 5 slug/identifier fields lack a unique constraint",
+            "detail": {
+              "fields": [
+                "teamMember.slug",
+                "blogPost.slug",
+                "service.slug",
+                "career.slug",
+                "industry.slug"
+              ]
+            }
+          },
+          "fixHint": "Add a unique validation to slug and identifier fields."
+        },
+        {
+          "id": "validation.requiredDiscipline",
+          "title": "Types declare required fields",
+          "severity": "minor",
+          "status": "fail",
+          "evidence": {
+            "summary": "15 content types have no required field",
+            "affectedTypes": [
+              "timeline",
+              "ourHistory",
+              "teamMember",
+              "aboutUs",
+              "blogPost",
+              "termsAndPrivacy",
+              "service",
+              "whatWeStandFor",
+              "career",
+              "download",
+              "industry",
+              "pageSection",
+              "slider",
+              "homePage",
+              "slide"
+            ]
+          },
+          "fixHint": "Mark each type's essential fields as required."
+        }
+      ],
+      "state": "scored",
+      "score": 0,
+      "band": "poor"
+    },
+    {
+      "id": "slug",
+      "title": "Slug & Routing Hygiene",
+      "tier": "medium",
+      "weight": 1,
+      "checks": [
+        {
+          "id": "slug.present",
+          "title": "Page types have a slug field",
+          "severity": "critical",
+          "status": "fail",
+          "evidence": {
+            "summary": "5 of 7 page-like types declare a slug field",
+            "affectedTypes": [
+              "aboutUs",
+              "homePage"
+            ]
+          },
+          "fixHint": "Add a slug field to every routable content type."
+        },
+        {
+          "id": "slug.unique",
+          "title": "Slug fields are unique",
+          "severity": "major",
+          "status": "fail",
+          "evidence": {
+            "summary": "0 of 7 page-like types have a unique slug",
+            "affectedTypes": [
+              "teamMember",
+              "aboutUs",
+              "blogPost",
+              "service",
+              "career",
+              "industry",
+              "homePage"
+            ]
+          },
+          "fixHint": "Add a unique validation to slug fields to prevent colliding URLs."
+        },
+        {
+          "id": "slug.pattern",
+          "title": "Slug fields are pattern-validated",
+          "severity": "minor",
+          "status": "fail",
+          "evidence": {
+            "summary": "0 of 7 page-like types pattern-validate their slug",
+            "affectedTypes": [
+              "teamMember",
+              "aboutUs",
+              "blogPost",
+              "service",
+              "career",
+              "industry",
+              "homePage"
+            ]
+          },
+          "fixHint": "Add a regexp validation so slugs stay URL-safe."
+        }
+      ],
+      "state": "scored",
+      "score": 0,
+      "band": "poor"
+    },
+    {
+      "id": "assets",
+      "title": "Asset Management",
+      "tier": "medium",
+      "weight": 1,
+      "checks": [
+        {
+          "id": "assets.modeledAsRef",
+          "title": "Assets modeled as references",
+          "severity": "major",
+          "status": "pass",
+          "evidence": {
+            "summary": "19 asset reference fields found"
+          },
+          "fixHint": "Reference media via Link/Asset fields rather than storing URLs as strings."
+        },
+        {
+          "id": "assets.altText",
+          "title": "Asset-owning types provide alt text",
+          "severity": "major",
+          "status": "fail",
+          "evidence": {
+            "summary": "11 of 11 asset-owning types lack an alt/caption field",
+            "affectedTypes": [
+              "timeline",
+              "teamMember",
+              "aboutUs",
+              "blogPost",
+              "service",
+              "whatWeStandFor",
+              "download",
+              "industry",
+              "pageSection",
+              "homePage",
+              "slide"
+            ]
+          },
+          "fixHint": "Add an alt-text or caption field next to each media field for accessibility and SEO."
+        },
+        {
+          "id": "assets.constraints",
+          "title": "Asset fields constrain size/type",
+          "severity": "minor",
+          "status": "fail",
+          "evidence": {
+            "summary": "0 of 19 asset fields enforce size/dimension/mime constraints"
+          },
+          "fixHint": "Add assetFileSize, assetImageDimensions, or mime-group validations to media fields."
+        }
+      ],
+      "state": "scored",
+      "score": 40,
+      "band": "poor"
+    },
+    {
+      "id": "i18n",
+      "title": "Internationalization",
+      "tier": "situational",
+      "weight": 0.5,
+      "checks": [],
+      "state": "not_applicable",
+      "reason": "Single-locale space — internationalization does not apply."
+    },
+    {
+      "id": "composable",
+      "title": "Composable Content",
+      "tier": "situational",
+      "weight": 0.5,
+      "checks": [
+        {
+          "id": "composable.modularArrays",
+          "title": "Modular content arrays exist",
+          "severity": "minor",
+          "status": "fail",
+          "evidence": {
+            "summary": "No multi-type entry arrays found"
+          },
+          "fixHint": "Model flexible layouts as arrays of multiple block types (a page-builder pattern). Note: editor UX (widgets, sidebar) is not assessable from public data."
+        }
+      ],
+      "state": "scored",
+      "score": 0,
+      "band": "poor"
+    },
+    {
+      "id": "globalConfig",
+      "title": "Global Configuration",
+      "tier": "situational",
+      "weight": 0.5,
+      "checks": [
+        {
+          "id": "globalConfig.settingsType",
+          "title": "Centralized settings type exists",
+          "severity": "minor",
+          "status": "fail",
+          "evidence": {
+            "summary": "No centralized settings/config type found"
+          },
+          "fixHint": "Add a singleton settings type for global config instead of hardcoding values."
+        },
+        {
+          "id": "globalConfig.navModeled",
+          "title": "Navigation is modeled as content",
+          "severity": "minor",
+          "status": "fail",
+          "evidence": {
+            "summary": "No navigation/menu type found"
+          },
+          "fixHint": "Model navigation as content so editors can manage menus without code changes."
+        },
+        {
+          "id": "globalConfig.redirects",
+          "title": "Redirects are modeled as entries",
+          "severity": "minor",
+          "fixHint": "Model redirects as entries so editors can manage them in the CMS.",
+          "status": "fail",
+          "evidence": {
+            "summary": "No redirect type, and redirects are not handled elsewhere"
+          }
+        }
+      ],
+      "state": "scored",
+      "score": 0,
+      "band": "poor"
+    },
+    {
+      "id": "schemaDebt",
+      "title": "Schema Debt",
+      "tier": "situational",
+      "weight": 0.5,
+      "checks": [
+        {
+          "id": "schemaDebt.hiddenFields",
+          "title": "Few hidden/read-only fields",
+          "severity": "major",
+          "status": "pass",
+          "evidence": {
+            "summary": "0 of 108 fields are hidden from editors"
+          },
+          "fixHint": "Remove hidden fields once migrations are complete rather than leaving dead schema visible only via the API."
+        },
+        {
+          "id": "schemaDebt.namingConsistency",
+          "title": "Consistent field naming",
+          "severity": "minor",
+          "status": "pass",
+          "evidence": {
+            "summary": "100% of field ids follow a single casing convention"
+          },
+          "fixHint": "Adopt one casing convention (camelCase) across all field ids."
+        },
+        {
+          "id": "schemaDebt.namingMeaningful",
+          "title": "Field names are meaningful",
+          "severity": "minor",
+          "fixHint": "Rename cryptic fields to describe their content.",
+          "status": "pass",
+          "evidence": {
+            "summary": "Field/type names are meaningful"
+          }
+        },
+        {
+          "id": "schemaDebt.noDescription",
+          "title": "Content types have descriptions",
+          "severity": "minor",
+          "status": "fail",
+          "evidence": {
+            "summary": "3 of 15 content types lack a description",
+            "affectedTypes": [
+              "ourHistory",
+              "termsAndPrivacy",
+              "pageSection"
+            ]
+          },
+          "fixHint": "Add a description to each content type so editors know when and how to use it."
+        }
+      ],
+      "state": "scored",
+      "score": 80,
+      "band": "good"
+    }
+  ],
+  "narration": {
+    "overall": "This content model scores 42/100 (poor): the structure is clean — naming is clear, references are intact, and there is little schema debt — but the editorial guardrails around it are almost entirely missing. The biggest risk is SEO: none of the 7 page-like types (homePage, blogPost, service, teamMember, career, industry, aboutUs) carry meta title, meta description, canonical, OG image, or noindex fields, so search appearance is entirely hardcoded or absent. Compounding that, no slug is unique or pattern-validated, so two blog posts or services can silently claim the same URL. The most valuable next fix is a shared SEO component type linked from every page type, followed by unique + regexp validations on the 5 existing slug fields.",
+    "dimensions": {
+      "seo": "Scores 0 because not one of the 7 page-like types declares any SEO field — no meta title, meta description, canonical URL, OG image, or noindex control.",
+      "modeling": "Scores 100: types are cohesive and well-scoped, the flagged orphans (career, download, industry, termsAndPrivacy) are all deliberately standalone collections or singletons, and no god types exist.",
+      "referentialIntegrity": "Scores 100: every reference resolves to existing types and most entry links (e.g. homePage.slider, service.team, blogPost.authors) restrict their allowed content types.",
+      "validation": "Scores 0 because only 3 of 108 fields carry any validation, all 5 slug fields lack a unique constraint, and none of the 15 types marks even one field as required.",
+      "slug": "Scores 0: aboutUs and homePage have no slug at all, and the 5 slugs that do exist (blogPost, service, teamMember, career, industry) are neither unique nor pattern-validated.",
+      "assets": "Scores 40 because all 11 asset-owning types lack an alt-text or caption field and none of the 19 asset fields constrains file size, dimensions, or mime type.",
+      "i18n": "Not applicable: this is a single-locale space, so internationalization is not assessed.",
+      "composable": "Scores 0 because no multi-type entry arrays exist — pages like homePage hard-wire single-purpose sections instead of a flexible block/page-builder pattern.",
+      "globalConfig": "Scores 0: there is no centralized settings type, navigation is not modeled as content, and no redirect type exists despite the model managing slug-addressed pages.",
+      "schemaDebt": "Scores 80 (good): the only debt is that 3 of 15 types — ourHistory, termsAndPrivacy, pageSection — lack a description telling editors when to use them."
+    },
+    "findings": {
+      "seo.title": {
+        "impact": "Search engines fall back to the on-page title for all 7 page-like types, so blog posts, service pages, and attorney profiles cannot be tuned for search snippets — a direct traffic cost for a professional-services site that competes on search.",
+        "fix": "Add a metaTitle Symbol field (with a size validation around 60 characters) to homePage, blogPost, service, teamMember, career, industry, and aboutUs — ideally via one shared SEO component type linked from each."
+      },
+      "seo.description": {
+        "impact": "With no meta description on any page type, Google composes snippets from arbitrary page text, so editors cannot influence click-through rates on blog posts, services, or team profiles.",
+        "fix": "Add a metaDescription Text field with a size validation (~155 characters) to the same 7 page types, ideally inside the shared SEO component."
+      },
+      "seo.canonical": {
+        "impact": "Without a canonical field, duplicate routes to the same content (e.g. a blog post reachable under multiple paths or with query parameters) split ranking signal and risk duplicate-content penalties across all 7 page types.",
+        "fix": "Add a canonicalUrl Symbol field with a regexp validation for absolute URLs to each page-like type so editors can consolidate duplicates."
+      },
+      "seo.ogImage": {
+        "impact": "Links to any page shared on LinkedIn or X render without a preview image, which measurably suppresses clicks — notable for a firm whose blog posts and attorney profiles are shared professionally.",
+        "fix": "Add an ogImage asset link (with an assetImageDimensions validation of at least 1200×630) to each page-like type or the shared SEO component."
+      },
+      "seo.noindex": {
+        "impact": "Editors cannot exclude thin or temporary pages (a draft industry page, an expired career posting) from search without a code deploy.",
+        "fix": "Add a noindex Boolean field to each page-like type and wire it to the robots meta tag in the frontend."
+      },
+      "validation.coverage": {
+        "impact": "With only 3 of 108 fields validated, nothing stops empty titles, malformed emails on teamMember, or arbitrary strings in enum-like fields such as timeline.imagePosition and download.category — inconsistencies surface as frontend bugs instead of editor errors.",
+        "fix": "Add validations type by type: size limits on titles and descriptions, a regexp on teamMember.email and phoneNumber, and 'accept only specified values' lists on option fields like imagePosition and arrowDirection."
+      },
+      "validation.identifierUnique": {
+        "impact": "All 5 slug fields accept duplicates, so two services or two blog posts can share a slug and one silently becomes unreachable or renders the wrong content, depending on frontend query order.",
+        "fix": "Enable the unique validation on the slug field of blogPost, service, teamMember, career, and industry in each content type's field settings."
+      },
+      "validation.requiredDiscipline": {
+        "impact": "No type requires any field, so an editor can publish a blog post without a title or slug, or a slide without an image, and the frontend must defensively handle every missing value.",
+        "fix": "Mark each type's essential fields as required — at minimum the displayField (title/name), slugs on routable types, and the primary media field on visual components like slide."
+      },
+      "slug.present": {
+        "impact": "aboutUs and homePage have no slug, so their routes are hardcoded in the frontend; editors cannot restructure those URLs, and the types cannot participate in slug-driven routing or sitemap generation.",
+        "fix": "Add a slug Symbol field (unique + regexp-validated) to aboutUs; for homePage, either add a fixed slug or explicitly treat it as the root singleton in routing code."
+      },
+      "slug.unique": {
+        "impact": "None of the page types enforces slug uniqueness, so colliding URLs between entries are possible at any time — the highest-likelihood routing defect in this model given multiple editors and no constraint.",
+        "fix": "Turn on the unique validation for every slug field across the 7 page-like types in Contentful's field validation settings."
+      },
+      "slug.pattern": {
+        "impact": "Slugs accept spaces, uppercase, and special characters, which produce encoded or broken URLs (e.g. '/team/John Smith') and inconsistent link formats across the site.",
+        "fix": "Add a regexp validation such as ^[a-z0-9]+(?:-[a-z0-9]+)*$ to every slug field so only URL-safe kebab-case values can be saved."
+      },
+      "assets.altText": {
+        "impact": "All 11 image-owning types (blogPost featured images, teamMember avatars, slide images, etc.) ship without alt text, hurting accessibility compliance and forfeiting image-search traffic.",
+        "fix": "Add a companion altText Symbol field next to each image link field, or standardize on filling the asset's built-in description and enforcing it editorially."
+      },
+      "assets.constraints": {
+        "impact": "None of the 19 asset fields limits size, dimensions, or file type, so an editor can attach a 40 MB PNG as a slide background or a PDF as an avatar, degrading page performance unpredictably.",
+        "fix": "Add assetFileSize and mime-group (images only) validations to image fields, and assetImageDimensions minimums on layout-critical ones like slide.image and blogPost.wideImage."
+      },
+      "composable.modularArrays": {
+        "impact": "homePage wires each section into a dedicated field (slider, aboutSection, servicesSection), so adding or reordering a landing-page section requires a schema change and deploy instead of an editor action.",
+        "fix": "Introduce a sections array on page types that accepts multiple block content types (pageSection, slider, and future blocks) to enable a page-builder pattern."
+      },
+      "globalConfig.settingsType": {
+        "impact": "Site-wide values like the logo, contact details, and social links have no home in the CMS, so they live hardcoded in the frontend and every change needs a developer.",
+        "fix": "Create a siteSettings singleton content type holding logo, contact info, social profiles, and footer text, and read it once at build/render time."
+      },
+      "globalConfig.navModeled": {
+        "impact": "Header and footer menus cannot be edited in Contentful; adding an industry page or reordering services in the nav requires a code change.",
+        "fix": "Add a navigation content type (label + list of menu-item entries referencing page types or URLs) and render the menus from it."
+      },
+      "globalConfig.redirects": {
+        "impact": "The model manages slug-addressed pages but has no redirect entries, so renaming a service or attorney slug breaks inbound links and accumulated SEO equity with no editorial remedy.",
+        "fix": "Add a redirect content type (fromPath, toPath, statusCode) and have the frontend or edge layer consume it before 404ing."
+      },
+      "schemaDebt.noDescription": {
+        "impact": "ourHistory, termsAndPrivacy, and pageSection give editors no guidance on their purpose, and the ambiguity is real — pageSection is reused across homePage sections while aboutUs also has its own ourHistory rich-text field.",
+        "fix": "Fill in the description on these 3 content types in the Contentful type editor, stating what each is for and where it renders."
+      }
+    }
+  },
+  "model": {
+    "cms": "contentful",
+    "spaceId": "j3e6q038l6io",
+    "environment": "master",
+    "contentTypes": [
+      {
+        "id": "timeline",
+        "name": "Timeline",
+        "description": "Timeline",
+        "displayField": "title",
+        "createdAt": "2024-04-24T06:58:19.634Z",
+        "updatedAt": "2024-05-23T17:20:38.080Z",
+        "fields": [
+          {
+            "id": "year",
+            "name": "Year",
+            "type": "integer",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": []
+          },
+          {
+            "id": "title",
+            "name": "Title",
+            "type": "text",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": []
+          },
+          {
+            "id": "subtitle",
+            "name": "Subtitle",
+            "type": "text",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": []
+          },
+          {
+            "id": "description",
+            "name": "Description",
+            "type": "longText",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": []
+          },
+          {
+            "id": "image",
+            "name": "Image",
+            "type": "link",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": [],
+            "linkTarget": "asset"
+          },
+          {
+            "id": "imagePosition",
+            "name": "Image Position",
+            "type": "text",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": []
+          },
+          {
+            "id": "hasIcon",
+            "name": "Has Icon",
+            "type": "boolean",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": []
+          },
+          {
+            "id": "icon",
+            "name": "Icon",
+            "type": "link",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": [],
+            "linkTarget": "asset"
+          },
+          {
+            "id": "imageHasBorder",
+            "name": "Image Has Border",
+            "type": "boolean",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": []
+          },
+          {
+            "id": "isImageRounded",
+            "name": "Is Image Rounded",
+            "type": "boolean",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": []
+          },
+          {
+            "id": "combineYearAndDescription",
+            "name": "Combine Year and Description",
+            "type": "boolean",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": []
+          },
+          {
+            "id": "hasBackgroundColor",
+            "name": "Has Background Color",
+            "type": "boolean",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": []
+          },
+          {
+            "id": "isYearBackgroundRounded",
+            "name": "Is year background rounded",
+            "type": "boolean",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": []
+          },
+          {
+            "id": "isDarkBackground",
+            "name": "Is Dark Background",
+            "type": "boolean",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": []
+          },
+          {
+            "id": "arrowDirection",
+            "name": "Arrow direction",
+            "type": "text",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": []
+          }
+        ]
+      },
+      {
+        "id": "ourHistory",
+        "name": "Our History",
+        "description": "",
+        "createdAt": "2024-04-24T06:59:55.606Z",
+        "updatedAt": "2024-04-25T21:23:32.720Z",
+        "fields": [
+          {
+            "id": "description",
+            "name": "Description",
+            "type": "richText",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": []
+          },
+          {
+            "id": "timeline",
+            "name": "Timeline",
+            "type": "array",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": [],
+            "items": {
+              "type": "link",
+              "linkTarget": "entry",
+              "allowedLinkTypes": [
+                "timeline"
+              ],
+              "validations": [
+                {
+                  "kind": "linkContentType",
+                  "params": {
+                    "linkContentType": [
+                      "timeline"
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "id": "topLevelTimeline",
+            "name": "Top Level Timeline",
+            "type": "link",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": [
+              {
+                "kind": "linkContentType",
+                "params": {
+                  "linkContentType": [
+                    "timeline"
+                  ]
+                }
+              }
+            ],
+            "linkTarget": "entry",
+            "allowedLinkTypes": [
+              "timeline"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "teamMember",
+        "name": "Team Member",
+        "description": "Team Member",
+        "displayField": "name",
+        "createdAt": "2023-12-14T12:44:43.285Z",
+        "updatedAt": "2024-02-25T08:52:35.981Z",
+        "fields": [
+          {
+            "id": "name",
+            "name": "Name",
+            "type": "text",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": []
+          },
+          {
+            "id": "slug",
+            "name": "Slug",
+            "type": "text",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": []
+          },
+          {
+            "id": "order",
+            "name": "Order",
+            "type": "integer",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": []
+          },
+          {
+            "id": "position",
+            "name": "Position",
+            "type": "text",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": []
+          },
+          {
+            "id": "email",
+            "name": "Email",
+            "type": "text",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": []
+          },
+          {
+            "id": "phoneNumber",
+            "name": "Phone Number",
+            "type": "text",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": []
+          },
+          {
+            "id": "education",
+            "name": "Education",
+            "type": "text",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": []
+          },
+          {
+            "id": "avatar",
+            "name": "Avatar",
+            "type": "link",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": [],
+            "linkTarget": "asset"
+          },
+          {
+            "id": "transparentAvatar",
+            "name": "Transparent Avatar",
+            "type": "link",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": [],
+            "linkTarget": "asset"
+          },
+          {
+            "id": "bio",
+            "name": "Bio",
+            "type": "richText",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": []
+          },
+          {
+            "id": "memberships",
+            "name": "Memberships",
+            "type": "array",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": [],
+            "items": {
+              "type": "text",
+              "validations": []
+            }
+          },
+          {
+            "id": "practiceAreas",
+            "name": "Practice Areas",
+            "type": "array",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": [],
+            "items": {
+              "type": "link",
+              "linkTarget": "entry",
+              "allowedLinkTypes": [
+                "service"
+              ],
+              "validations": [
+                {
+                  "kind": "linkContentType",
+                  "params": {
+                    "linkContentType": [
+                      "service"
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "id": "priorExperience",
+            "name": "Prior Experience",
+            "type": "array",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": [],
+            "items": {
+              "type": "text",
+              "validations": []
+            }
+          },
+          {
+            "id": "twitterProfile",
+            "name": "Twitter Profile",
+            "type": "text",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": []
+          },
+          {
+            "id": "linkedInProfile",
+            "name": "LinkedIn Profile",
+            "type": "text",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": []
+          },
+          {
+            "id": "noteableWorks",
+            "name": "Noteable Works",
+            "type": "richText",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": []
+          },
+          {
+            "id": "awards",
+            "name": "Awards",
+            "type": "array",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": [],
+            "items": {
+              "type": "text",
+              "validations": []
+            }
+          }
+        ]
+      },
+      {
+        "id": "aboutUs",
+        "name": "About Us",
+        "description": "About Us",
+        "displayField": "title",
+        "createdAt": "2023-12-14T12:53:27.733Z",
+        "updatedAt": "2024-02-25T08:41:16.821Z",
+        "fields": [
+          {
+            "id": "title",
+            "name": "Title",
+            "type": "text",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": []
+          },
+          {
+            "id": "description",
+            "name": "Description",
+            "type": "richText",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": []
+          },
+          {
+            "id": "whatWeStandFor",
+            "name": "What We Stand For",
+            "type": "array",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": [],
+            "items": {
+              "type": "link",
+              "linkTarget": "entry",
+              "allowedLinkTypes": [
+                "whatWeStandFor"
+              ],
+              "validations": [
+                {
+                  "kind": "linkContentType",
+                  "params": {
+                    "linkContentType": [
+                      "whatWeStandFor"
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "id": "breadcrumbImage",
+            "name": "Breadcrumb Image",
+            "type": "link",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": [],
+            "linkTarget": "asset"
+          },
+          {
+            "id": "mission",
+            "name": "Mission",
+            "type": "longText",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": []
+          },
+          {
+            "id": "vision",
+            "name": "Vision",
+            "type": "longText",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": []
+          },
+          {
+            "id": "ourHistory",
+            "name": "Our History",
+            "type": "richText",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": []
+          },
+          {
+            "id": "awards",
+            "name": "Awards",
+            "type": "array",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": [],
+            "items": {
+              "type": "link",
+              "linkTarget": "asset",
+              "validations": []
+            }
+          }
+        ]
+      },
+      {
+        "id": "blogPost",
+        "name": "Blog Post",
+        "description": "Blog Post",
+        "displayField": "title",
+        "createdAt": "2023-12-14T12:28:23.765Z",
+        "updatedAt": "2024-01-23T16:57:41.445Z",
+        "fields": [
+          {
+            "id": "title",
+            "name": "Title",
+            "type": "longText",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": []
+          },
+          {
+            "id": "slug",
+            "name": "Slug",
+            "type": "text",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": []
+          },
+          {
+            "id": "authors",
+            "name": "Authors",
+            "type": "array",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": [],
+            "items": {
+              "type": "link",
+              "linkTarget": "entry",
+              "allowedLinkTypes": [
+                "teamMember"
+              ],
+              "validations": [
+                {
+                  "kind": "linkContentType",
+                  "params": {
+                    "linkContentType": [
+                      "teamMember"
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "id": "shortDescription",
+            "name": "Short Description",
+            "type": "longText",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": []
+          },
+          {
+            "id": "content",
+            "name": "Content",
+            "type": "richText",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": []
+          },
+          {
+            "id": "breadcrumbImage",
+            "name": "Breadcrumb Image",
+            "type": "link",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": [],
+            "linkTarget": "asset"
+          },
+          {
+            "id": "featuredImage",
+            "name": "Featured Image",
+            "type": "link",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": [],
+            "linkTarget": "asset"
+          },
+          {
+            "id": "wideImage",
+            "name": "Wide Image",
+            "type": "link",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": [],
+            "linkTarget": "asset"
+          },
+          {
+            "id": "relatedBlogPosts",
+            "name": "Related Blog Posts",
+            "type": "array",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": [],
+            "items": {
+              "type": "link",
+              "linkTarget": "entry",
+              "allowedLinkTypes": [
+                "blogPost"
+              ],
+              "validations": [
+                {
+                  "kind": "linkContentType",
+                  "params": {
+                    "linkContentType": [
+                      "blogPost"
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "id": "download",
+            "name": "Download",
+            "type": "link",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": [],
+            "linkTarget": "asset"
+          }
+        ]
+      },
+      {
+        "id": "termsAndPrivacy",
+        "name": "Terms And Privacy",
+        "description": "",
+        "createdAt": "2024-01-20T10:18:47.386Z",
+        "updatedAt": "2024-01-20T10:18:47.386Z",
+        "fields": [
+          {
+            "id": "terms",
+            "name": "Terms",
+            "type": "richText",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": []
+          },
+          {
+            "id": "privacyPolicy",
+            "name": "Privacy Policy",
+            "type": "richText",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": []
+          }
+        ]
+      },
+      {
+        "id": "service",
+        "name": "Service",
+        "description": "Service",
+        "displayField": "name",
+        "createdAt": "2023-12-14T12:37:42.943Z",
+        "updatedAt": "2024-01-20T08:38:19.539Z",
+        "fields": [
+          {
+            "id": "name",
+            "name": "Name",
+            "type": "text",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": []
+          },
+          {
+            "id": "slug",
+            "name": "Slug",
+            "type": "text",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": []
+          },
+          {
+            "id": "order",
+            "name": "Order",
+            "type": "integer",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": []
+          },
+          {
+            "id": "description",
+            "name": "Description",
+            "type": "richText",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": []
+          },
+          {
+            "id": "breadcrumbImage",
+            "name": "Breadcrumb Image",
+            "type": "link",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": [],
+            "linkTarget": "asset"
+          },
+          {
+            "id": "image",
+            "name": "Image",
+            "type": "link",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": [],
+            "linkTarget": "asset"
+          },
+          {
+            "id": "team",
+            "name": "Team",
+            "type": "array",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": [],
+            "items": {
+              "type": "link",
+              "linkTarget": "entry",
+              "allowedLinkTypes": [
+                "teamMember"
+              ],
+              "validations": [
+                {
+                  "kind": "linkContentType",
+                  "params": {
+                    "linkContentType": [
+                      "teamMember"
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "id": "insights",
+            "name": "Insights",
+            "type": "array",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": [],
+            "items": {
+              "type": "link",
+              "linkTarget": "entry",
+              "allowedLinkTypes": [
+                "blogPost"
+              ],
+              "validations": [
+                {
+                  "kind": "linkContentType",
+                  "params": {
+                    "linkContentType": [
+                      "blogPost"
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "id": "downloads",
+            "name": "Downloads",
+            "type": "array",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": [],
+            "items": {
+              "type": "link",
+              "linkTarget": "entry",
+              "validations": []
+            }
+          },
+          {
+            "id": "overviewTitle",
+            "name": "Overview Title",
+            "type": "longText",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": []
+          },
+          {
+            "id": "noteableWorks",
+            "name": "Noteable Works",
+            "type": "richText",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": []
+          }
+        ]
+      },
+      {
+        "id": "whatWeStandFor",
+        "name": "What We Stand For",
+        "description": "What We Stand For",
+        "displayField": "title",
+        "createdAt": "2023-12-14T12:56:30.497Z",
+        "updatedAt": "2024-01-20T07:34:31.771Z",
+        "fields": [
+          {
+            "id": "title",
+            "name": "Title",
+            "type": "text",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": []
+          },
+          {
+            "id": "description",
+            "name": "Description",
+            "type": "longText",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": []
+          },
+          {
+            "id": "icon",
+            "name": "Icon",
+            "type": "link",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": [],
+            "linkTarget": "asset"
+          }
+        ]
+      },
+      {
+        "id": "career",
+        "name": "Career",
+        "description": "Career",
+        "displayField": "jobTitle",
+        "createdAt": "2024-01-10T15:42:33.434Z",
+        "updatedAt": "2024-01-10T15:52:12.583Z",
+        "fields": [
+          {
+            "id": "jobTitle",
+            "name": "Job Title",
+            "type": "text",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": []
+          },
+          {
+            "id": "slug",
+            "name": "Slug",
+            "type": "text",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": []
+          },
+          {
+            "id": "department",
+            "name": "Department",
+            "type": "text",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": []
+          },
+          {
+            "id": "location",
+            "name": "Location",
+            "type": "location",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": []
+          },
+          {
+            "id": "description",
+            "name": "Description",
+            "type": "richText",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": []
+          },
+          {
+            "id": "requirements",
+            "name": "Requirements",
+            "type": "richText",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": []
+          },
+          {
+            "id": "responsibilities",
+            "name": "Responsibilities",
+            "type": "richText",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": []
+          },
+          {
+            "id": "applicationLink",
+            "name": "Application Link",
+            "type": "text",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": []
+          }
+        ]
+      },
+      {
+        "id": "download",
+        "name": "Download",
+        "description": "Downloads",
+        "displayField": "title",
+        "createdAt": "2023-12-16T12:43:13.915Z",
+        "updatedAt": "2023-12-16T12:43:25.916Z",
+        "fields": [
+          {
+            "id": "title",
+            "name": "Title",
+            "type": "text",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": []
+          },
+          {
+            "id": "file",
+            "name": "File",
+            "type": "link",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": [],
+            "linkTarget": "asset"
+          },
+          {
+            "id": "description",
+            "name": "Description",
+            "type": "longText",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": []
+          },
+          {
+            "id": "image",
+            "name": "Image",
+            "type": "link",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": [],
+            "linkTarget": "asset"
+          },
+          {
+            "id": "category",
+            "name": "Category",
+            "type": "text",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": []
+          },
+          {
+            "id": "version",
+            "name": "Version",
+            "type": "text",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": []
+          },
+          {
+            "id": "size",
+            "name": "Size",
+            "type": "text",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": []
+          }
+        ]
+      },
+      {
+        "id": "industry",
+        "name": "Industry",
+        "description": "Industry",
+        "displayField": "name",
+        "createdAt": "2023-12-14T12:47:04.682Z",
+        "updatedAt": "2023-12-16T09:33:08.395Z",
+        "fields": [
+          {
+            "id": "name",
+            "name": "Name",
+            "type": "text",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": []
+          },
+          {
+            "id": "slug",
+            "name": "Slug",
+            "type": "text",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": []
+          },
+          {
+            "id": "description",
+            "name": "Description",
+            "type": "longText",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": []
+          },
+          {
+            "id": "image",
+            "name": "Image",
+            "type": "link",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": [],
+            "linkTarget": "asset"
+          }
+        ]
+      },
+      {
+        "id": "pageSection",
+        "name": "Page Section",
+        "description": "",
+        "displayField": "title",
+        "createdAt": "2023-12-14T12:19:26.542Z",
+        "updatedAt": "2023-12-16T09:27:28.427Z",
+        "fields": [
+          {
+            "id": "title",
+            "name": "Title",
+            "type": "text",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": []
+          },
+          {
+            "id": "subTitle",
+            "name": "Sub Title",
+            "type": "text",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": []
+          },
+          {
+            "id": "description",
+            "name": "Description",
+            "type": "richText",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": []
+          },
+          {
+            "id": "image",
+            "name": "Image",
+            "type": "link",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": [],
+            "linkTarget": "asset"
+          },
+          {
+            "id": "isImageRight",
+            "name": "Is Image On Right",
+            "type": "boolean",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": []
+          },
+          {
+            "id": "link",
+            "name": "Link",
+            "type": "text",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": []
+          },
+          {
+            "id": "linkText",
+            "name": "Link Text",
+            "type": "text",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": []
+          }
+        ]
+      },
+      {
+        "id": "slider",
+        "name": "Slider",
+        "description": "Slider",
+        "displayField": "title",
+        "createdAt": "2023-12-14T12:05:29.104Z",
+        "updatedAt": "2023-12-14T12:31:37.195Z",
+        "fields": [
+          {
+            "id": "title",
+            "name": "Title",
+            "type": "text",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": []
+          },
+          {
+            "id": "slides",
+            "name": "Slides",
+            "type": "array",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": [],
+            "items": {
+              "type": "link",
+              "linkTarget": "entry",
+              "allowedLinkTypes": [
+                "slide"
+              ],
+              "validations": [
+                {
+                  "kind": "linkContentType",
+                  "params": {
+                    "linkContentType": [
+                      "slide"
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "id": "homePage",
+        "name": "Home Page",
+        "description": "Home Page",
+        "createdAt": "2023-12-14T11:58:38.833Z",
+        "updatedAt": "2023-12-14T12:31:05.354Z",
+        "fields": [
+          {
+            "id": "slider",
+            "name": "Slider",
+            "type": "link",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": [
+              {
+                "kind": "linkContentType",
+                "params": {
+                  "linkContentType": [
+                    "slider"
+                  ]
+                }
+              }
+            ],
+            "linkTarget": "entry",
+            "allowedLinkTypes": [
+              "slider"
+            ]
+          },
+          {
+            "id": "featuredPosts",
+            "name": "Featured Posts",
+            "type": "array",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": [],
+            "items": {
+              "type": "link",
+              "linkTarget": "entry",
+              "allowedLinkTypes": [
+                "blogPost"
+              ],
+              "validations": [
+                {
+                  "kind": "linkContentType",
+                  "params": {
+                    "linkContentType": [
+                      "blogPost"
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "id": "awards",
+            "name": "Awards",
+            "type": "array",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": [],
+            "items": {
+              "type": "link",
+              "linkTarget": "asset",
+              "validations": []
+            }
+          },
+          {
+            "id": "aboutSection",
+            "name": "About Section",
+            "type": "link",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": [
+              {
+                "kind": "linkContentType",
+                "params": {
+                  "linkContentType": [
+                    "pageSection"
+                  ]
+                }
+              }
+            ],
+            "linkTarget": "entry",
+            "allowedLinkTypes": [
+              "pageSection"
+            ]
+          },
+          {
+            "id": "servicesSection",
+            "name": "Services Section",
+            "type": "array",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": [],
+            "items": {
+              "type": "link",
+              "linkTarget": "entry",
+              "allowedLinkTypes": [
+                "pageSection"
+              ],
+              "validations": [
+                {
+                  "kind": "linkContentType",
+                  "params": {
+                    "linkContentType": [
+                      "pageSection"
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "id": "testimonialsSection",
+            "name": "Testimonials Section",
+            "type": "array",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": [],
+            "items": {
+              "type": "link",
+              "linkTarget": "entry",
+              "validations": []
+            }
+          }
+        ]
+      },
+      {
+        "id": "slide",
+        "name": "Slide",
+        "description": "Slide",
+        "displayField": "title",
+        "createdAt": "2023-12-14T12:08:33.990Z",
+        "updatedAt": "2023-12-14T12:08:33.990Z",
+        "fields": [
+          {
+            "id": "title",
+            "name": "Title",
+            "type": "text",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": []
+          },
+          {
+            "id": "description",
+            "name": "Description",
+            "type": "longText",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": []
+          },
+          {
+            "id": "image",
+            "name": "Image",
+            "type": "link",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": [],
+            "linkTarget": "asset"
+          },
+          {
+            "id": "link",
+            "name": "Link",
+            "type": "text",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": []
+          },
+          {
+            "id": "linkText",
+            "name": "Link Text",
+            "type": "text",
+            "required": false,
+            "localized": false,
+            "editorState": {
+              "hidden": false,
+              "readOnly": false
+            },
+            "validations": []
+          }
+        ]
+      }
+    ],
+    "locales": [
+      {
+        "code": "en-US",
+        "name": "English (United States)",
+        "default": true,
+        "fallbackCode": null,
+        "supportsFallback": true
+      }
+    ],
+    "referenceGraph": {
+      "typeIds": [
+        "timeline",
+        "ourHistory",
+        "teamMember",
+        "aboutUs",
+        "blogPost",
+        "termsAndPrivacy",
+        "service",
+        "whatWeStandFor",
+        "career",
+        "download",
+        "industry",
+        "pageSection",
+        "slider",
+        "homePage",
+        "slide"
+      ],
+      "edges": [
+        {
+          "fromType": "ourHistory",
+          "fromField": "timeline",
+          "toTypes": [
+            "timeline"
+          ],
+          "viaArray": true
+        },
+        {
+          "fromType": "ourHistory",
+          "fromField": "topLevelTimeline",
+          "toTypes": [
+            "timeline"
+          ],
+          "viaArray": false
+        },
+        {
+          "fromType": "teamMember",
+          "fromField": "practiceAreas",
+          "toTypes": [
+            "service"
+          ],
+          "viaArray": true
+        },
+        {
+          "fromType": "aboutUs",
+          "fromField": "whatWeStandFor",
+          "toTypes": [
+            "whatWeStandFor"
+          ],
+          "viaArray": true
+        },
+        {
+          "fromType": "blogPost",
+          "fromField": "authors",
+          "toTypes": [
+            "teamMember"
+          ],
+          "viaArray": true
+        },
+        {
+          "fromType": "blogPost",
+          "fromField": "relatedBlogPosts",
+          "toTypes": [
+            "blogPost"
+          ],
+          "viaArray": true
+        },
+        {
+          "fromType": "service",
+          "fromField": "team",
+          "toTypes": [
+            "teamMember"
+          ],
+          "viaArray": true
+        },
+        {
+          "fromType": "service",
+          "fromField": "insights",
+          "toTypes": [
+            "blogPost"
+          ],
+          "viaArray": true
+        },
+        {
+          "fromType": "service",
+          "fromField": "downloads",
+          "toTypes": [],
+          "viaArray": true
+        },
+        {
+          "fromType": "slider",
+          "fromField": "slides",
+          "toTypes": [
+            "slide"
+          ],
+          "viaArray": true
+        },
+        {
+          "fromType": "homePage",
+          "fromField": "slider",
+          "toTypes": [
+            "slider"
+          ],
+          "viaArray": false
+        },
+        {
+          "fromType": "homePage",
+          "fromField": "featuredPosts",
+          "toTypes": [
+            "blogPost"
+          ],
+          "viaArray": true
+        },
+        {
+          "fromType": "homePage",
+          "fromField": "aboutSection",
+          "toTypes": [
+            "pageSection"
+          ],
+          "viaArray": false
+        },
+        {
+          "fromType": "homePage",
+          "fromField": "servicesSection",
+          "toTypes": [
+            "pageSection"
+          ],
+          "viaArray": true
+        },
+        {
+          "fromType": "homePage",
+          "fromField": "testimonialsSection",
+          "toTypes": [],
+          "viaArray": true
+        }
+      ]
+    },
+    "meta": {
+      "fetchedAt": "2026-07-02T19:42:46.774Z",
+      "contentTypeCount": 15,
+      "localeCount": 1
+    }
+  },
+  "rawSchema": {
+    "contentTypes": [
+      {
+        "sys": {
+          "id": "timeline",
+          "createdAt": "2024-04-24T06:58:19.634Z",
+          "updatedAt": "2024-05-23T17:20:38.080Z",
+          "space": {
+            "sys": {
+              "type": "Link",
+              "linkType": "Space",
+              "id": "j3e6q038l6io"
+            }
+          },
+          "type": "ContentType",
+          "environment": {
+            "sys": {
+              "id": "master",
+              "type": "Link",
+              "linkType": "Environment"
+            }
+          },
+          "revision": 9
+        },
+        "name": "Timeline",
+        "description": "Timeline",
+        "displayField": "title",
+        "fields": [
+          {
+            "id": "year",
+            "name": "Year",
+            "type": "Integer",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false
+          },
+          {
+            "id": "title",
+            "name": "Title",
+            "type": "Symbol",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false
+          },
+          {
+            "id": "subtitle",
+            "name": "Subtitle",
+            "type": "Symbol",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false
+          },
+          {
+            "id": "description",
+            "name": "Description",
+            "type": "Text",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false
+          },
+          {
+            "id": "image",
+            "name": "Image",
+            "type": "Link",
+            "linkType": "Asset",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false
+          },
+          {
+            "id": "imagePosition",
+            "name": "Image Position",
+            "type": "Symbol",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false
+          },
+          {
+            "id": "hasIcon",
+            "name": "Has Icon",
+            "type": "Boolean",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false
+          },
+          {
+            "id": "icon",
+            "name": "Icon",
+            "type": "Link",
+            "linkType": "Asset",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false
+          },
+          {
+            "id": "imageHasBorder",
+            "name": "Image Has Border",
+            "type": "Boolean",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false
+          },
+          {
+            "id": "isImageRounded",
+            "name": "Is Image Rounded",
+            "type": "Boolean",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false
+          },
+          {
+            "id": "combineYearAndDescription",
+            "name": "Combine Year and Description",
+            "type": "Boolean",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false
+          },
+          {
+            "id": "hasBackgroundColor",
+            "name": "Has Background Color",
+            "type": "Boolean",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false
+          },
+          {
+            "id": "isYearBackgroundRounded",
+            "name": "Is year background rounded",
+            "type": "Boolean",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false
+          },
+          {
+            "id": "isDarkBackground",
+            "name": "Is Dark Background",
+            "type": "Boolean",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false
+          },
+          {
+            "id": "arrowDirection",
+            "name": "Arrow direction",
+            "type": "Symbol",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false
+          }
+        ]
+      },
+      {
+        "sys": {
+          "id": "ourHistory",
+          "createdAt": "2024-04-24T06:59:55.606Z",
+          "updatedAt": "2024-04-25T21:23:32.720Z",
+          "space": {
+            "sys": {
+              "type": "Link",
+              "linkType": "Space",
+              "id": "j3e6q038l6io"
+            }
+          },
+          "type": "ContentType",
+          "environment": {
+            "sys": {
+              "id": "master",
+              "type": "Link",
+              "linkType": "Environment"
+            }
+          },
+          "revision": 2
+        },
+        "name": "Our History",
+        "description": "",
+        "displayField": null,
+        "fields": [
+          {
+            "id": "description",
+            "name": "Description",
+            "type": "RichText",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false
+          },
+          {
+            "id": "timeline",
+            "name": "Timeline",
+            "type": "Array",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false,
+            "items": {
+              "type": "Link",
+              "linkType": "Entry",
+              "validations": [
+                {
+                  "linkContentType": [
+                    "timeline"
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            "id": "topLevelTimeline",
+            "name": "Top Level Timeline",
+            "type": "Link",
+            "linkType": "Entry",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false,
+            "validations": [
+              {
+                "linkContentType": [
+                  "timeline"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "sys": {
+          "id": "teamMember",
+          "createdAt": "2023-12-14T12:44:43.285Z",
+          "updatedAt": "2024-02-25T08:52:35.981Z",
+          "space": {
+            "sys": {
+              "type": "Link",
+              "linkType": "Space",
+              "id": "j3e6q038l6io"
+            }
+          },
+          "type": "ContentType",
+          "environment": {
+            "sys": {
+              "id": "master",
+              "type": "Link",
+              "linkType": "Environment"
+            }
+          },
+          "revision": 19
+        },
+        "name": "Team Member",
+        "description": "Team Member",
+        "displayField": "name",
+        "fields": [
+          {
+            "id": "name",
+            "name": "Name",
+            "type": "Symbol",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false
+          },
+          {
+            "id": "slug",
+            "name": "Slug",
+            "type": "Symbol",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false
+          },
+          {
+            "id": "order",
+            "name": "Order",
+            "type": "Integer",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false
+          },
+          {
+            "id": "position",
+            "name": "Position",
+            "type": "Symbol",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false
+          },
+          {
+            "id": "email",
+            "name": "Email",
+            "type": "Symbol",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false
+          },
+          {
+            "id": "phoneNumber",
+            "name": "Phone Number",
+            "type": "Symbol",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false
+          },
+          {
+            "id": "education",
+            "name": "Education",
+            "type": "Symbol",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false
+          },
+          {
+            "id": "avatar",
+            "name": "Avatar",
+            "type": "Link",
+            "linkType": "Asset",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false
+          },
+          {
+            "id": "transparentAvatar",
+            "name": "Transparent Avatar",
+            "type": "Link",
+            "linkType": "Asset",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false
+          },
+          {
+            "id": "bio",
+            "name": "Bio",
+            "type": "RichText",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false
+          },
+          {
+            "id": "memberships",
+            "name": "Memberships",
+            "type": "Array",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false,
+            "items": {
+              "type": "Symbol",
+              "validations": []
+            }
+          },
+          {
+            "id": "practiceAreas",
+            "name": "Practice Areas",
+            "type": "Array",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false,
+            "items": {
+              "type": "Link",
+              "linkType": "Entry",
+              "validations": [
+                {
+                  "linkContentType": [
+                    "service"
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            "id": "priorExperience",
+            "name": "Prior Experience",
+            "type": "Array",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false,
+            "items": {
+              "type": "Symbol",
+              "validations": []
+            }
+          },
+          {
+            "id": "twitterProfile",
+            "name": "Twitter Profile",
+            "type": "Symbol",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false
+          },
+          {
+            "id": "linkedInProfile",
+            "name": "LinkedIn Profile",
+            "type": "Symbol",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false
+          },
+          {
+            "id": "noteableWorks",
+            "name": "Noteable Works",
+            "type": "RichText",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false
+          },
+          {
+            "id": "awards",
+            "name": "Awards",
+            "type": "Array",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false,
+            "items": {
+              "type": "Symbol",
+              "validations": []
+            }
+          }
+        ]
+      },
+      {
+        "sys": {
+          "id": "aboutUs",
+          "createdAt": "2023-12-14T12:53:27.733Z",
+          "updatedAt": "2024-02-25T08:41:16.821Z",
+          "space": {
+            "sys": {
+              "type": "Link",
+              "linkType": "Space",
+              "id": "j3e6q038l6io"
+            }
+          },
+          "type": "ContentType",
+          "environment": {
+            "sys": {
+              "id": "master",
+              "type": "Link",
+              "linkType": "Environment"
+            }
+          },
+          "revision": 12
+        },
+        "name": "About Us",
+        "description": "About Us",
+        "displayField": "title",
+        "fields": [
+          {
+            "id": "title",
+            "name": "Title",
+            "type": "Symbol",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false
+          },
+          {
+            "id": "description",
+            "name": "Description",
+            "type": "RichText",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false
+          },
+          {
+            "id": "whatWeStandFor",
+            "name": "What We Stand For",
+            "type": "Array",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false,
+            "items": {
+              "type": "Link",
+              "linkType": "Entry",
+              "validations": [
+                {
+                  "linkContentType": [
+                    "whatWeStandFor"
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            "id": "breadcrumbImage",
+            "name": "Breadcrumb Image",
+            "type": "Link",
+            "linkType": "Asset",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false
+          },
+          {
+            "id": "mission",
+            "name": "Mission",
+            "type": "Text",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false
+          },
+          {
+            "id": "vision",
+            "name": "Vision",
+            "type": "Text",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false
+          },
+          {
+            "id": "ourHistory",
+            "name": "Our History",
+            "type": "RichText",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false
+          },
+          {
+            "id": "awards",
+            "name": "Awards",
+            "type": "Array",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false,
+            "items": {
+              "type": "Link",
+              "linkType": "Asset",
+              "validations": []
+            }
+          }
+        ]
+      },
+      {
+        "sys": {
+          "id": "blogPost",
+          "createdAt": "2023-12-14T12:28:23.765Z",
+          "updatedAt": "2024-01-23T16:57:41.445Z",
+          "space": {
+            "sys": {
+              "type": "Link",
+              "linkType": "Space",
+              "id": "j3e6q038l6io"
+            }
+          },
+          "type": "ContentType",
+          "environment": {
+            "sys": {
+              "id": "master",
+              "type": "Link",
+              "linkType": "Environment"
+            }
+          },
+          "revision": 9
+        },
+        "name": "Blog Post",
+        "description": "Blog Post",
+        "displayField": "title",
+        "fields": [
+          {
+            "id": "title",
+            "name": "Title",
+            "type": "Text",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false
+          },
+          {
+            "id": "slug",
+            "name": "Slug",
+            "type": "Symbol",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false
+          },
+          {
+            "id": "authors",
+            "name": "Authors",
+            "type": "Array",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false,
+            "items": {
+              "type": "Link",
+              "linkType": "Entry",
+              "validations": [
+                {
+                  "linkContentType": [
+                    "teamMember"
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            "id": "shortDescription",
+            "name": "Short Description",
+            "type": "Text",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false
+          },
+          {
+            "id": "content",
+            "name": "Content",
+            "type": "RichText",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false
+          },
+          {
+            "id": "breadcrumbImage",
+            "name": "Breadcrumb Image",
+            "type": "Link",
+            "linkType": "Asset",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false
+          },
+          {
+            "id": "featuredImage",
+            "name": "Featured Image",
+            "type": "Link",
+            "linkType": "Asset",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false
+          },
+          {
+            "id": "wideImage",
+            "name": "Wide Image",
+            "type": "Link",
+            "linkType": "Asset",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false
+          },
+          {
+            "id": "relatedBlogPosts",
+            "name": "Related Blog Posts",
+            "type": "Array",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false,
+            "items": {
+              "type": "Link",
+              "linkType": "Entry",
+              "validations": [
+                {
+                  "linkContentType": [
+                    "blogPost"
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            "id": "download",
+            "name": "Download",
+            "type": "Link",
+            "linkType": "Asset",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false
+          }
+        ]
+      },
+      {
+        "sys": {
+          "id": "termsAndPrivacy",
+          "createdAt": "2024-01-20T10:18:47.386Z",
+          "updatedAt": "2024-01-20T10:18:47.386Z",
+          "space": {
+            "sys": {
+              "type": "Link",
+              "linkType": "Space",
+              "id": "j3e6q038l6io"
+            }
+          },
+          "type": "ContentType",
+          "environment": {
+            "sys": {
+              "id": "master",
+              "type": "Link",
+              "linkType": "Environment"
+            }
+          },
+          "revision": 1
+        },
+        "name": "Terms And Privacy",
+        "description": "",
+        "displayField": null,
+        "fields": [
+          {
+            "id": "terms",
+            "name": "Terms",
+            "type": "RichText",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false
+          },
+          {
+            "id": "privacyPolicy",
+            "name": "Privacy Policy",
+            "type": "RichText",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false
+          }
+        ]
+      },
+      {
+        "sys": {
+          "id": "service",
+          "createdAt": "2023-12-14T12:37:42.943Z",
+          "updatedAt": "2024-01-20T08:38:19.539Z",
+          "space": {
+            "sys": {
+              "type": "Link",
+              "linkType": "Space",
+              "id": "j3e6q038l6io"
+            }
+          },
+          "type": "ContentType",
+          "environment": {
+            "sys": {
+              "id": "master",
+              "type": "Link",
+              "linkType": "Environment"
+            }
+          },
+          "revision": 10
+        },
+        "name": "Service",
+        "description": "Service",
+        "displayField": "name",
+        "fields": [
+          {
+            "id": "name",
+            "name": "Name",
+            "type": "Symbol",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false
+          },
+          {
+            "id": "slug",
+            "name": "Slug",
+            "type": "Symbol",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false
+          },
+          {
+            "id": "order",
+            "name": "Order",
+            "type": "Integer",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false
+          },
+          {
+            "id": "description",
+            "name": "Description",
+            "type": "RichText",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false
+          },
+          {
+            "id": "breadcrumbImage",
+            "name": "Breadcrumb Image",
+            "type": "Link",
+            "linkType": "Asset",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false
+          },
+          {
+            "id": "image",
+            "name": "Image",
+            "type": "Link",
+            "linkType": "Asset",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false
+          },
+          {
+            "id": "team",
+            "name": "Team",
+            "type": "Array",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false,
+            "items": {
+              "type": "Link",
+              "linkType": "Entry",
+              "validations": [
+                {
+                  "linkContentType": [
+                    "teamMember"
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            "id": "insights",
+            "name": "Insights",
+            "type": "Array",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false,
+            "items": {
+              "type": "Link",
+              "linkType": "Entry",
+              "validations": [
+                {
+                  "linkContentType": [
+                    "blogPost"
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            "id": "downloads",
+            "name": "Downloads",
+            "type": "Array",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false,
+            "items": {
+              "type": "Link",
+              "linkType": "Entry",
+              "validations": []
+            }
+          },
+          {
+            "id": "overviewTitle",
+            "name": "Overview Title",
+            "type": "Text",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false
+          },
+          {
+            "id": "noteableWorks",
+            "name": "Noteable Works",
+            "type": "RichText",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false
+          }
+        ]
+      },
+      {
+        "sys": {
+          "id": "whatWeStandFor",
+          "createdAt": "2023-12-14T12:56:30.497Z",
+          "updatedAt": "2024-01-20T07:34:31.771Z",
+          "space": {
+            "sys": {
+              "type": "Link",
+              "linkType": "Space",
+              "id": "j3e6q038l6io"
+            }
+          },
+          "type": "ContentType",
+          "environment": {
+            "sys": {
+              "id": "master",
+              "type": "Link",
+              "linkType": "Environment"
+            }
+          },
+          "revision": 5
+        },
+        "name": "What We Stand For",
+        "description": "What We Stand For",
+        "displayField": "title",
+        "fields": [
+          {
+            "id": "title",
+            "name": "Title",
+            "type": "Symbol",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false
+          },
+          {
+            "id": "description",
+            "name": "Description",
+            "type": "Text",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false
+          },
+          {
+            "id": "icon",
+            "name": "Icon",
+            "type": "Link",
+            "linkType": "Asset",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false
+          }
+        ]
+      },
+      {
+        "sys": {
+          "id": "career",
+          "createdAt": "2024-01-10T15:42:33.434Z",
+          "updatedAt": "2024-01-10T15:52:12.583Z",
+          "space": {
+            "sys": {
+              "type": "Link",
+              "linkType": "Space",
+              "id": "j3e6q038l6io"
+            }
+          },
+          "type": "ContentType",
+          "environment": {
+            "sys": {
+              "id": "master",
+              "type": "Link",
+              "linkType": "Environment"
+            }
+          },
+          "revision": 3
+        },
+        "name": "Career",
+        "description": "Career",
+        "displayField": "jobTitle",
+        "fields": [
+          {
+            "id": "jobTitle",
+            "name": "Job Title",
+            "type": "Symbol",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false
+          },
+          {
+            "id": "slug",
+            "name": "Slug",
+            "type": "Symbol",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false
+          },
+          {
+            "id": "department",
+            "name": "Department",
+            "type": "Symbol",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false
+          },
+          {
+            "id": "location",
+            "name": "Location",
+            "type": "Location",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false
+          },
+          {
+            "id": "description",
+            "name": "Description",
+            "type": "RichText",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false
+          },
+          {
+            "id": "requirements",
+            "name": "Requirements",
+            "type": "RichText",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false
+          },
+          {
+            "id": "responsibilities",
+            "name": "Responsibilities",
+            "type": "RichText",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false
+          },
+          {
+            "id": "applicationLink",
+            "name": "Application Link",
+            "type": "Symbol",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false
+          }
+        ]
+      },
+      {
+        "sys": {
+          "id": "download",
+          "createdAt": "2023-12-16T12:43:13.915Z",
+          "updatedAt": "2023-12-16T12:43:25.916Z",
+          "space": {
+            "sys": {
+              "type": "Link",
+              "linkType": "Space",
+              "id": "j3e6q038l6io"
+            }
+          },
+          "type": "ContentType",
+          "environment": {
+            "sys": {
+              "id": "master",
+              "type": "Link",
+              "linkType": "Environment"
+            }
+          },
+          "revision": 2
+        },
+        "name": "Download",
+        "description": "Downloads",
+        "displayField": "title",
+        "fields": [
+          {
+            "id": "title",
+            "name": "Title",
+            "type": "Symbol",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false
+          },
+          {
+            "id": "file",
+            "name": "File",
+            "type": "Link",
+            "linkType": "Asset",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false
+          },
+          {
+            "id": "description",
+            "name": "Description",
+            "type": "Text",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false
+          },
+          {
+            "id": "image",
+            "name": "Image",
+            "type": "Link",
+            "linkType": "Asset",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false
+          },
+          {
+            "id": "category",
+            "name": "Category",
+            "type": "Symbol",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false
+          },
+          {
+            "id": "version",
+            "name": "Version",
+            "type": "Symbol",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false
+          },
+          {
+            "id": "size",
+            "name": "Size",
+            "type": "Symbol",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false
+          }
+        ]
+      },
+      {
+        "sys": {
+          "id": "industry",
+          "createdAt": "2023-12-14T12:47:04.682Z",
+          "updatedAt": "2023-12-16T09:33:08.395Z",
+          "space": {
+            "sys": {
+              "type": "Link",
+              "linkType": "Space",
+              "id": "j3e6q038l6io"
+            }
+          },
+          "type": "ContentType",
+          "environment": {
+            "sys": {
+              "id": "master",
+              "type": "Link",
+              "linkType": "Environment"
+            }
+          },
+          "revision": 3
+        },
+        "name": "Industry",
+        "description": "Industry",
+        "displayField": "name",
+        "fields": [
+          {
+            "id": "name",
+            "name": "Name",
+            "type": "Symbol",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false
+          },
+          {
+            "id": "slug",
+            "name": "Slug",
+            "type": "Symbol",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false
+          },
+          {
+            "id": "description",
+            "name": "Description",
+            "type": "Text",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false
+          },
+          {
+            "id": "image",
+            "name": "Image",
+            "type": "Link",
+            "linkType": "Asset",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false
+          }
+        ]
+      },
+      {
+        "sys": {
+          "id": "pageSection",
+          "createdAt": "2023-12-14T12:19:26.542Z",
+          "updatedAt": "2023-12-16T09:27:28.427Z",
+          "space": {
+            "sys": {
+              "type": "Link",
+              "linkType": "Space",
+              "id": "j3e6q038l6io"
+            }
+          },
+          "type": "ContentType",
+          "environment": {
+            "sys": {
+              "id": "master",
+              "type": "Link",
+              "linkType": "Environment"
+            }
+          },
+          "revision": 2
+        },
+        "name": "Page Section",
+        "description": "",
+        "displayField": "title",
+        "fields": [
+          {
+            "id": "title",
+            "name": "Title",
+            "type": "Symbol",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false
+          },
+          {
+            "id": "subTitle",
+            "name": "Sub Title",
+            "type": "Symbol",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false
+          },
+          {
+            "id": "description",
+            "name": "Description",
+            "type": "RichText",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false
+          },
+          {
+            "id": "image",
+            "name": "Image",
+            "type": "Link",
+            "linkType": "Asset",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false
+          },
+          {
+            "id": "isImageRight",
+            "name": "Is Image On Right",
+            "type": "Boolean",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false
+          },
+          {
+            "id": "link",
+            "name": "Link",
+            "type": "Symbol",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false
+          },
+          {
+            "id": "linkText",
+            "name": "Link Text",
+            "type": "Symbol",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false
+          }
+        ]
+      },
+      {
+        "sys": {
+          "id": "slider",
+          "createdAt": "2023-12-14T12:05:29.104Z",
+          "updatedAt": "2023-12-14T12:31:37.195Z",
+          "space": {
+            "sys": {
+              "type": "Link",
+              "linkType": "Space",
+              "id": "j3e6q038l6io"
+            }
+          },
+          "type": "ContentType",
+          "environment": {
+            "sys": {
+              "id": "master",
+              "type": "Link",
+              "linkType": "Environment"
+            }
+          },
+          "revision": 2
+        },
+        "name": "Slider",
+        "description": "Slider",
+        "displayField": "title",
+        "fields": [
+          {
+            "id": "title",
+            "name": "Title",
+            "type": "Symbol",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false
+          },
+          {
+            "id": "slides",
+            "name": "Slides",
+            "type": "Array",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false,
+            "items": {
+              "type": "Link",
+              "linkType": "Entry",
+              "validations": [
+                {
+                  "linkContentType": [
+                    "slide"
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "sys": {
+          "id": "homePage",
+          "createdAt": "2023-12-14T11:58:38.833Z",
+          "updatedAt": "2023-12-14T12:31:05.354Z",
+          "space": {
+            "sys": {
+              "type": "Link",
+              "linkType": "Space",
+              "id": "j3e6q038l6io"
+            }
+          },
+          "type": "ContentType",
+          "environment": {
+            "sys": {
+              "id": "master",
+              "type": "Link",
+              "linkType": "Environment"
+            }
+          },
+          "revision": 3
+        },
+        "name": "Home Page",
+        "description": "Home Page",
+        "displayField": null,
+        "fields": [
+          {
+            "id": "slider",
+            "name": "Slider",
+            "type": "Link",
+            "linkType": "Entry",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false,
+            "validations": [
+              {
+                "linkContentType": [
+                  "slider"
+                ]
+              }
+            ]
+          },
+          {
+            "id": "featuredPosts",
+            "name": "Featured Posts",
+            "type": "Array",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false,
+            "items": {
+              "type": "Link",
+              "linkType": "Entry",
+              "validations": [
+                {
+                  "linkContentType": [
+                    "blogPost"
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            "id": "awards",
+            "name": "Awards",
+            "type": "Array",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false,
+            "items": {
+              "type": "Link",
+              "linkType": "Asset",
+              "validations": []
+            }
+          },
+          {
+            "id": "aboutSection",
+            "name": "About Section",
+            "type": "Link",
+            "linkType": "Entry",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false,
+            "validations": [
+              {
+                "linkContentType": [
+                  "pageSection"
+                ]
+              }
+            ]
+          },
+          {
+            "id": "servicesSection",
+            "name": "Services Section",
+            "type": "Array",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false,
+            "items": {
+              "type": "Link",
+              "linkType": "Entry",
+              "validations": [
+                {
+                  "linkContentType": [
+                    "pageSection"
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            "id": "testimonialsSection",
+            "name": "Testimonials Section",
+            "type": "Array",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false,
+            "items": {
+              "type": "Link",
+              "linkType": "Entry",
+              "validations": []
+            }
+          }
+        ]
+      },
+      {
+        "sys": {
+          "id": "slide",
+          "createdAt": "2023-12-14T12:08:33.990Z",
+          "updatedAt": "2023-12-14T12:08:33.990Z",
+          "space": {
+            "sys": {
+              "type": "Link",
+              "linkType": "Space",
+              "id": "j3e6q038l6io"
+            }
+          },
+          "type": "ContentType",
+          "environment": {
+            "sys": {
+              "id": "master",
+              "type": "Link",
+              "linkType": "Environment"
+            }
+          },
+          "revision": 1
+        },
+        "name": "Slide",
+        "description": "Slide",
+        "displayField": "title",
+        "fields": [
+          {
+            "id": "title",
+            "name": "Title",
+            "type": "Symbol",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false
+          },
+          {
+            "id": "description",
+            "name": "Description",
+            "type": "Text",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false
+          },
+          {
+            "id": "image",
+            "name": "Image",
+            "type": "Link",
+            "linkType": "Asset",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false
+          },
+          {
+            "id": "link",
+            "name": "Link",
+            "type": "Symbol",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false
+          },
+          {
+            "id": "linkText",
+            "name": "Link Text",
+            "type": "Symbol",
+            "localized": false,
+            "required": false,
+            "disabled": false,
+            "omitted": false
+          }
+        ]
+      }
+    ],
+    "locales": [
+      {
+        "code": "en-US",
+        "name": "English (United States)",
+        "default": true,
+        "fallbackCode": null,
+        "sys": {
+          "id": "6520JBX7mz4FATWtRP455O",
+          "type": "Locale",
+          "version": 1
+        }
+      }
+    ]
+  },
+  "generatedAt": "2026-07-02T19:44:59.097Z"
+}

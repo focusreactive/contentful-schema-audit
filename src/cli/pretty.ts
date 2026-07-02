@@ -16,7 +16,7 @@ function renderDimension(dimension: DimensionResult): string {
   return [header, ...failed].join("\n");
 }
 
-export function renderPretty(result: ValidationResult): string {
+export function renderPretty(result: ValidationResult, opts: { aiHint?: boolean } = {}): string {
   const { source, overall } = result;
   const total = overall.scoredCount + overall.notAssessableCount + overall.notApplicableCount;
   const gradeStr = overall.score === null ? "N/A" : `${overall.score} / 100`;
@@ -29,5 +29,6 @@ export function renderPretty(result: ValidationResult): string {
     "",
     `  Summary: ${overall.scoredCount} scored · ${overall.notAssessableCount} not assessable · ${overall.notApplicableCount} not applicable`,
   ];
+  if (opts.aiHint) lines.push("", "  AI semantic analysis & narration: run /validate-cms inside Claude Code.");
   return lines.join("\n");
 }

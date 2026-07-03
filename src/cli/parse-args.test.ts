@@ -31,6 +31,27 @@ describe("parseArgs bare mode", () => {
     expect(without.args.report).toBeUndefined();
   });
 
+  it("captures optional file names for --json and --report", () => {
+    const parsed = parseArgs(["node", "cli", "https://site.com", "--json", "raw", "--report", "health"]);
+
+    if (parsed.command !== "bare") throw new Error("expected bare");
+    expect(parsed.args).toMatchObject({ json: "raw", report: "health" });
+  });
+
+  it("accepts bare --report and bare --json as value-less toggles", () => {
+    const parsed = parseArgs(["node", "cli", "https://site.com", "--json", "--report"]);
+
+    if (parsed.command !== "bare") throw new Error("expected bare");
+    expect(parsed.args).toMatchObject({ json: true, report: true });
+  });
+
+  it("maps --out to the output folder", () => {
+    const parsed = parseArgs(["node", "cli", "https://site.com", "--out", "audits"]);
+
+    if (parsed.command !== "bare") throw new Error("expected bare");
+    expect(parsed.args.out).toBe("audits");
+  });
+
   it("defaults debug and includeRawSchema to false and enables them via flags", () => {
     const parsed = parseArgs(["node", "cli", "https://site.com", "--debug", "--include-raw-schema"]);
 

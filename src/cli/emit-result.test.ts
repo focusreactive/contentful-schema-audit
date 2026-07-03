@@ -26,36 +26,36 @@ afterEach(() => {
 });
 
 describe("emitResult", () => {
-  it("prints JSON only under --json, without the hint", async () => {
+  it("always writes the Markdown report and prints only its path", async () => {
     const chunks = captureStdout();
+    const out = await mkdtemp(join(tmpdir(), "emit-test-"));
 
-    await emitResult(result, { json: true }, { aiHint: true });
+    await emitResult(result, { json: false, out });
 
-    const output = chunks.join("");
-    expect(JSON.parse(output)).toMatchObject({ overall: { score: 64 } });
-    expect(output).not.toContain("/validate-cms");
+    const reportPath = join(out, "site.com.md");
+    expect(await readFile(reportPath, "utf8")).toContain("# CMS Schema Health");
+    expect(chunks.join("")).toBe(`Report written to ${reportPath}\n`);
   });
 
-  it("prints pretty with hint plus JSON echo by default", async () => {
+  it("also writes the JSON file under --json and prints both paths", async () => {
     const chunks = captureStdout();
+    const out = await mkdtemp(join(tmpdir(), "emit-test-"));
 
-    await emitResult(result, { json: false }, { aiHint: true });
+    await emitResult(result, { json: true, out });
 
-    const output = chunks.join("");
-    expect(output).toContain("CMS Schema Health");
-    expect(output).toContain("run /validate-cms inside Claude Code");
-    expect(output).toContain('"generatedAt"');
+    expect(JSON.parse(await readFile(join(out, "site.com.json"), "utf8"))).toMatchObject({ overall: { band: "warn" } });
+    expect(chunks.join("")).toBe(
+      `Report written to ${join(out, "site.com.md")}\nJSON written to ${join(out, "site.com.json")}\n`,
+    );
   });
 
-  it("writes --out and suppresses the JSON echo", async () => {
-    const chunks = captureStdout();
-    const out = join(await mkdtemp(join(tmpdir(), "emit-test-")), "result.json");
+  it("creates the output folder recursively and honors custom file names", async () => {
+    captureStdout();
+    const out = join(await mkdtemp(join(tmpdir(), "emit-test-")), "nested", "dir");
 
-    await emitResult(result, { json: false, out }, { aiHint: false });
+    await emitResult(result, { json: "raw", report: "health", out });
 
-    const output = chunks.join("");
-    expect(output).toContain("CMS Schema Health");
-    expect(output).not.toContain('"generatedAt"');
-    expect(JSON.parse(await readFile(out, "utf8"))).toMatchObject({ overall: { band: "warn" } });
+    expect(await readFile(join(out, "health.md"), "utf8")).toContain("# CMS Schema Health");
+    expect(JSON.parse(await readFile(join(out, "raw.json"), "utf8"))).toMatchObject({ overall: { score: 64 } });
   });
 });

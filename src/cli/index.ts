@@ -27,12 +27,12 @@ async function main(): Promise<void> {
     }
     case "finalize": {
       const result = await runFinalize(parsed.args, { now });
-      await emitResult(result, parsed.args, { aiHint: false });
+      await emitResult(result, parsed.args);
       return;
     }
     case "bare": {
       const result = await run(parsed.args, { ...acquireDeps, now });
-      await emitResult(result, parsed.args, { aiHint: !parsed.args.json });
+      await emitResult(result, parsed.args);
       return;
     }
   }

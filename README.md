@@ -1,6 +1,6 @@
 # cms-schema-validator
 
-`cms-schema-validator` audits a Contentful content model across 10 deterministic health dimensions and produces a scored, tier-weighted report. It connects directly to the Contentful Delivery API — no management token needed — and emits both a pretty terminal summary and structured JSON. An optional AI layer — semantic role detection and prose narration — runs **in-session through Claude Code** via the `/validate-cms` skill; it never affects the numeric grade, which is always pure and deterministic.
+`cms-schema-validator` audits a Contentful content model across 10 deterministic health dimensions and produces a scored, tier-weighted report. It connects directly to the Contentful Delivery API — no management token needed — and writes a Markdown report (and optionally a JSON result) to disk. An optional AI layer — semantic role detection and prose narration — runs **in-session through Claude Code** via the `/validate-cms` skill; it never affects the numeric grade, which is always pure and deterministic.
 
 ---
 
@@ -73,18 +73,29 @@ cms-validate https://example.com --token <cda-token>
 
 ### Flag reference
 
-| Flag                   | Argument     | Default  | Description                                                                                                                                            |
-| ---------------------- | ------------ | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `--token`              | `<token>`    | —        | CDA delivery token. Falls back when token sniffing fails (URL mode) or replaces it entirely (direct mode).                                             |
-| `--space-id`           | `<id>`       | —        | Skip URL detection and audit this space directly.                                                                                                      |
-| `--environment`        | `<env>`      | `master` | Contentful environment to audit.                                                                                                                       |
-| `--region`             | `global\|eu` | `global` | Contentful region.                                                                                                                                     |
-| `--json`               | —            | off      | Print JSON output only (no pretty terminal summary).                                                                                                   |
-| `--include-model`      | —            | off      | Embed the full normalized content model in the JSON output.                                                                                            |
-| `--include-raw-schema` | —            | off      | Embed the raw, un-normalized CMS schema (content types + locales, exactly as fetched) in the JSON under `rawSchema`. Independent of `--include-model`. |
-| `--debug`              | —            | off      | Print detection diagnostics (space ID, token, and the source each was resolved from) to **stderr**. See [Debugging detection](#debugging-detection).   |
-| `--out`                | `<file>`     | —        | Write the JSON result to a file in addition to printing.                                                                                               |
-| `--report`             | `<file>`     | —        | Write a Markdown report to a file.                                                                                                                     |
+| Flag                   | Argument     | Default                     | Description                                                                                                                                            |
+| ---------------------- | ------------ | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `--token`              | `<token>`    | —                           | CDA delivery token. Falls back when token sniffing fails (URL mode) or replaces it entirely (direct mode).                                             |
+| `--space-id`           | `<id>`       | —                           | Skip URL detection and audit this space directly.                                                                                                      |
+| `--environment`        | `<env>`      | `master`                    | Contentful environment to audit.                                                                                                                       |
+| `--region`             | `global\|eu` | `global`                    | Contentful region.                                                                                                                                     |
+| `--json`               | `[file]`     | off                         | Also write the JSON result file. Optional value overrides the file name (default `{domain}.json`).                                                     |
+| `--include-model`      | —            | off                         | Embed the full normalized content model in the JSON output.                                                                                            |
+| `--include-raw-schema` | —            | off                         | Embed the raw, un-normalized CMS schema (content types + locales, exactly as fetched) in the JSON under `rawSchema`. Independent of `--include-model`. |
+| `--debug`              | —            | off                         | Print detection diagnostics (space ID, token, and the source each was resolved from) to **stderr**. See [Debugging detection](#debugging-detection).   |
+| `--out`                | `<dir>`      | `detected-schemas/{domain}` | Output folder for all written files, used verbatim.                                                                                                    |
+| `--report`             | `[file]`     | on                          | The Markdown report is always written. Optional value overrides the file name (default `{domain}.md`).                                                 |
+
+### Output files
+
+Reports are never printed to the terminal — every run writes files and prints only their paths:
+
+```
+Report written to detected-schemas/example.com/example.com.md
+JSON written to detected-schemas/example.com/example.com.json
+```
+
+`{domain}` is the URL hostname with a leading `www.` stripped; in direct mode (no URL) the space ID is used instead. `--report`/`--json` values must be bare file names — the `.md`/`.json` suffix is appended if missing, and folders are chosen with `--out` only.
 
 ### Pipeline subcommands
 
@@ -127,7 +138,7 @@ Outside Claude Code, `cms-validate` runs the deterministic audit only; dimension
 
 The `--debug` flag traces how the tool resolved the Contentful **space ID** and **delivery token** — which value it used and where that value came from. This is mainly useful in **URL mode**, where both are sniffed from a live page and it isn't obvious why detection succeeded or failed.
 
-All diagnostics are written to **stderr**, so they never contaminate stdout. You can safely combine `--debug` with `--json` (or `--out`) — the machine-readable result stays clean on stdout while diagnostics stream to stderr.
+All diagnostics are written to **stderr**, so they never contaminate stdout — the written result files stay clean while diagnostics stream to the terminal.
 
 ```bash
 cms-validate https://example.com --debug

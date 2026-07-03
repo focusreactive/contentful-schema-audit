@@ -23,6 +23,11 @@ From the user's request, split flags into:
 - Presentation (hold until `finalize`): --json, --out, --report,
   --include-model, --include-raw-schema
 
+Presentation semantics: the Markdown report is always written to a file
+(default `detected-schemas/{domain}/{domain}.md`; space ID replaces the
+domain when there is no URL). --json additionally writes the JSON result.
+--report/--json take an optional bare file name; --out sets the folder.
+
 ## Pipeline
 
 1. `digest <url|--space-id X --token Y> [acquisition flags]`
@@ -32,9 +37,9 @@ From the user's request, split flags into:
 2. `score --work-dir <dir>` (the dir is named in the brief's "## Next")
    Prints the narration brief. Follow it the same way.
 3. `finalize --work-dir <dir> [presentation flags]`
-   Prints the final report.
-4. Present the pretty report to the user in chat. If they asked for files
-   (--out/--report), confirm where they were written.
+   Writes the report file(s) and prints their paths.
+4. Tell the user the written file paths, exactly as the CLI printed them.
+   Never paste the report content into the chat.
 
 ## Retry contract (exit code 2)
 

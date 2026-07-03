@@ -5,9 +5,9 @@ import type { FinalizeArgs } from "./commands/finalize.js";
 import type { ScoreArgs } from "./commands/score.js";
 
 export interface OutputFlags {
-  json: boolean;
+  json: string | boolean;
   out?: string;
-  report?: string;
+  report?: string | true;
 }
 
 export interface BareCliArgs extends AcquireArgs, OutputFlags {
@@ -36,11 +36,11 @@ function withAcquisitionFlags(command: Command): Command {
 
 function withPresentationFlags(command: Command): Command {
   return command
-    .option("--json", "print JSON only")
+    .option("--json [file]", "also write the JSON result file (default name: {domain}.json)")
     .option("--include-model", "embed the normalized model in the JSON")
     .option("--include-raw-schema", "embed the raw, un-normalized CMS schema in the JSON")
-    .option("--out <file>", "write the JSON result to a file")
-    .option("--report <file>", "write a Markdown report to a file");
+    .option("--out <dir>", "output folder (default: detected-schemas/{domain})")
+    .option("--report [file]", "override the Markdown report file name (the report is always written)");
 }
 
 function toAcquireArgs(url: string | undefined, opts: Record<string, unknown>): AcquireArgs {
@@ -58,9 +58,9 @@ function toOutputFlags(
   opts: Record<string, unknown>,
 ): OutputFlags & { includeModel: boolean; includeRawSchema: boolean } {
   return {
-    json: Boolean(opts.json),
+    json: (opts.json as string | boolean | undefined) ?? false,
     out: opts.out as string | undefined,
-    report: opts.report as string | undefined,
+    report: opts.report as string | true | undefined,
     includeModel: Boolean(opts.includeModel),
     includeRawSchema: Boolean(opts.includeRawSchema),
   };

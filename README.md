@@ -1,6 +1,29 @@
-# cms-schema-validator
+# contentful-schema-audit
 
-`cms-schema-validator` audits a Contentful content model across 10 deterministic health dimensions and produces a scored, tier-weighted report. It connects directly to the Contentful Delivery API — no management token needed — and writes a Markdown report (and optionally a JSON result) to disk. An optional AI layer — semantic role detection and prose narration — runs **in-session through Claude Code** via the `/validate-cms` skill; it never affects the numeric grade, which is always pure and deterministic.
+## Overview
+
+`contentful-schema-audit` checks the **health of a Contentful content model** and turns it into a clear, shareable report. Point it at a live website (or at a Contentful space directly) and it inspects how the content is structured behind the scenes — then grades that structure and explains what's working, what's quietly costing the site, and what to fix first.
+
+### What it looks at
+
+It doesn't review the content itself (the words and images an editor typed) — it reviews the **shape** of the content: the schema editors work inside. In plain terms, it checks things like:
+
+- **SEO readiness** — are there fields for meta titles, descriptions, canonical URLs, and social images?
+- **Content modeling** — is content split into sensible, reusable pieces, or dumped into a few giant catch-all types?
+- **Links between content** — are relationships real references (that can't silently break) or fragile pasted-in text?
+- **Validation** — are there guardrails so editors can't save bad or inconsistent data?
+- **URLs & routing** — does every page have a clean, unique web address (slug)?
+- **Images & media** — are they properly attached and given alt text?
+- **Translations, global settings, and leftover clutter** from past changes to the schema.
+
+### What you get
+
+A Markdown report file containing:
+
+- an **overall grade** out of 100, banded as _good_, _warn_, or _poor_;
+- a **scoreboard** with a score for each area above;
+- a short **summary** of the biggest risks;
+- a **prioritized list of fixes**, each explaining what's at stake and what "good" looks like.
 
 ---
 
@@ -33,42 +56,21 @@ pnpm build
 
 ---
 
-## Usage
+## Usage - AI-assisted audit via Claude Code
 
-The CLI binary is `cms-validate`. During development you can run without building:
+AI semantic analysis and prose narration run **inside a Claude Code session**. Open this repo in Claude Code and run:
 
-```bash
-pnpm exec tsx src/cli/index.ts <args>
+```
+/validate-cms https://example.com
+/validate-cms --space-id <id> --token <cda-token> --report out.md
 ```
 
-### Mode 1 — Direct (space ID + token)
+Under the hood the skill drives a three-phase pipeline:
 
-Pass a space ID and a read-only CDA delivery token directly. No browser is launched.
-
-```bash
-cms-validate --space-id <id> --token <cda-token>
 ```
-
-**Example** — the public Contentful example space:
-
-```bash
-cms-validate --space-id cfexampleapi --token b4c0n73n7fu1
-```
-
-Without AI semantic analysis, dimensions that depend on it (e.g. SEO and Slug) are reported as "not assessable"; run the audit through Claude Code (see [AI analysis via Claude Code](#ai-analysis-via-claude-code)) to have them scored.
-
-### Mode 2 — URL (auto-detect)
-
-Pass a public site URL. A headless Chromium browser fetches the page and sniffs the Contentful space ID and delivery token from the page source. Requires Playwright (see Install above).
-
-```bash
-cms-validate https://example.com
-```
-
-If the delivery token cannot be sniffed automatically, pass it explicitly:
-
-```bash
-cms-validate https://example.com --token <cda-token>
+cms-validate digest …      # fetch + normalize, prints an AI brief
+cms-validate score …       # validates semantic.json, scores, prints the narration brief
+cms-validate finalize …    # validates narration.json, emits the final report
 ```
 
 ### Flag reference
@@ -85,111 +87,6 @@ cms-validate https://example.com --token <cda-token>
 | `--debug`              | —            | off                         | Print detection diagnostics (space ID, token, and the source each was resolved from) to **stderr**. See [Debugging detection](#debugging-detection).   |
 | `--out`                | `<dir>`      | `detected-schemas/{domain}` | Output folder for all written files, used verbatim.                                                                                                    |
 | `--report`             | `[file]`     | on                          | The Markdown report is always written. Optional value overrides the file name (default `{domain}.md`).                                                 |
-
-### Output files
-
-Reports are never printed to the terminal — every run writes files and prints only their paths:
-
-```
-Report written to detected-schemas/example.com/example.com.md
-JSON written to detected-schemas/example.com/example.com.json
-```
-
-`{domain}` is the URL hostname with a leading `www.` stripped; in direct mode (no URL) the space ID is used instead. `--report`/`--json` values must be bare file names — the `.md`/`.json` suffix is appended if missing, and folders are chosen with `--out` only.
-
-### Pipeline subcommands
-
-The AI-assisted audit runs as a three-phase pipeline driven from a Claude Code session (see [AI analysis via Claude Code](#ai-analysis-via-claude-code)):
-
-| Subcommand | Flags                                                     | What it does                                                                                         |
-| ---------- | --------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
-| `digest`   | `[url]` + acquisition flags, `--work-dir <dir>`           | Fetches and normalizes the model, persists pipeline state, prints the semantic-classification brief. |
-| `score`    | `--work-dir <dir>`, `--no-semantic`                       | Validates `semantic.json`, scores the model, prints the narration brief.                             |
-| `finalize` | `--work-dir <dir>`, `--no-narration` + presentation flags | Validates `narration.json` and emits the final report (identical shape to the bare command).         |
-
-**Exit codes:** `0` success · `1` operational error (network, arguments, missing/stale state) · `2` AI-input validation failure (`semantic.json`/`narration.json` rejected — the errors on stderr say exactly what to fix).
-
----
-
-## AI analysis via Claude Code
-
-AI semantic analysis (role detection that unlocks additional checks) and prose narration run **inside a Claude Code session** — there is no API key and the standalone CLI never calls a model. Open this repo in Claude Code and run:
-
-```
-/validate-cms https://example.com
-/validate-cms --space-id <id> --token <cda-token> --report out.md
-```
-
-Under the hood the skill drives the three-phase pipeline:
-
-```
-cms-validate digest …      # fetch + normalize, prints an AI brief
-cms-validate score …       # validates semantic.json, scores, prints the narration brief
-cms-validate finalize …    # validates narration.json, emits the final report
-```
-
-The session performs the classification/narration between phases; the CLI strictly validates every AI-written file (exit code 2 with actionable errors) and falls back gracefully (`--no-semantic` / `--no-narration`) so a run never dies from bad AI output. See [`.claude/skills/validate-cms/SKILL.md`](.claude/skills/validate-cms/SKILL.md) for the full workflow.
-
-Outside Claude Code, `cms-validate` runs the deterministic audit only; dimensions that require semantic analysis are reported as not assessable.
-
----
-
-## Debugging detection
-
-The `--debug` flag traces how the tool resolved the Contentful **space ID** and **delivery token** — which value it used and where that value came from. This is mainly useful in **URL mode**, where both are sniffed from a live page and it isn't obvious why detection succeeded or failed.
-
-All diagnostics are written to **stderr**, so they never contaminate stdout — the written result files stay clean while diagnostics stream to the terminal.
-
-```bash
-cms-validate https://example.com --debug
-```
-
-### What it prints
-
-Each resolved field is logged in a canonical one-line format:
-
-```
-[contentful] detect field=spaceId value=cfexampleapi source=api-host
-[contentful] detect field=token value=b4c0n73n7fu1 source=bearer-header
-```
-
-In URL mode, the tool collects multiple candidate tokens from the page and probes each against the Contentful Delivery API until one validates. With `--debug` you also see each probe result, and a note if the candidate list was truncated:
-
-```
-[contentful] token candidates truncated: 31 found, trying first 25
-[contentful] token probe source=query-param result=invalid
-[contentful] token probe source=bearer-header result=valid
-[contentful] detect field=token value=b4c0n73n7fu1 source=bearer-header
-```
-
-When nothing valid is found, the field is logged with `value=<none>` and `source=not-found`:
-
-```
-[contentful] detect field=token value=<none> source=not-found
-```
-
-### Detection sources
-
-The `source` field reports where each value was resolved from:
-
-| Source            | Meaning                                                       |
-| ----------------- | ------------------------------------------------------------- |
-| `provided-flag`   | Supplied explicitly via `--space-id` / `--token`.             |
-| `asset-host`      | Parsed from a Contentful asset host (`*.ctfassets.net`).      |
-| `api-host`        | Parsed from a Contentful API host (`*.contentful.com`).       |
-| `query-param`     | Found in a request URL query parameter (e.g. `access_token`). |
-| `bearer-header`   | Extracted from an `Authorization: Bearer` request header.     |
-| `post-body`       | Found in an outgoing request (POST) body.                     |
-| `response-body`   | Found in a network response body.                             |
-| `local-storage`   | Read from the page's `localStorage`.                          |
-| `session-storage` | Read from the page's `sessionStorage`.                        |
-| `cookie`          | Read from a page cookie.                                      |
-| `page-body`       | Matched in the raw HTML/JS of the page body.                  |
-| `not-found`       | No value could be resolved from any source.                   |
-
-If detection fails (`source=not-found`), pass the value explicitly with `--space-id` and/or `--token`, or fall back to [Direct mode](#mode-1--direct-space-id--token).
-
----
 
 ## Dimensions
 
@@ -351,13 +248,3 @@ A dimension can be in one of three states:
 - **`not_assessable`** — one or more required signals are missing (e.g. a signal that requires a management token). Also excluded from the overall grade.
 
 The overall score is re-normalized over only the dimensions that are actually scored. If no dimensions can be scored the overall grade is `not_assessed` (null).
-
----
-
-## Contentful capability boundaries
-
-The adapter uses only the **Contentful Delivery API** (CDA). This has the following implications:
-
-- **Composable / editor UX** — editor-interface configuration (widgets, sidebar layout, appearance) requires a management token and is not accessible from a public URL or a delivery token. Only the content modeling (field types, validations, link targets) is scored; the `composable` dimension reflects this limitation.
-- **Redirects** — only redirects modeled as Contentful entries (via a redirect content type) are visible from the CDA. Platform-level or edge-level redirects managed outside the CMS are not assessable.
-- **Content instances not sampled** — the audit inspects the schema (content types, fields, locales, reference graph) only. No entries or assets are fetched or analyzed.

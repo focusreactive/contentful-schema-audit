@@ -248,3 +248,8 @@ A dimension can be in one of three states:
 - **`not_assessable`** — one or more required signals are missing (e.g. a signal that requires a management token). Also excluded from the overall grade.
 
 The overall score is re-normalized over only the dimensions that are actually scored. If no dimensions can be scored the overall grade is `not_assessed` (null).
+
+
+## About
+
+Built by [FocusReactive](https://focusreactive.com/), a headless CMS and eCommerce engineering agency. Content-model audits are part of how we scope a [Contentful](https://focusreactive.com/contentful-expert-agency/) build or migration - [talk to us](https://focusreactive.com/#contacts) if you want one run on your space.
